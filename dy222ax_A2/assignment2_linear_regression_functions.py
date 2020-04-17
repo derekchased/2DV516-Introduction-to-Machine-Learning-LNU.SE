@@ -46,6 +46,7 @@ def feature_normalization(X):
     # elementwise division
     normalized = np.divide(diff,stddev)
     
+    # for testing
     # for each feature, stddev should be 1 and mean should be 0
     #print("stddev of normalized", np.std(normalized,0))    
     #print("mean of normalized", np.mean(normalized,0))    
@@ -53,48 +54,55 @@ def feature_normalization(X):
     return normalized  
 
 def normal_equation(Xe, y):
-    #minimizes cost function, can be seen as training MSE. Minimizing training mse is bad...not necessarily best
-    beta = np.linalg.inv(Xe.T.dot(Xe)).dot(Xe.T).dot(y)
-    return beta
+    # find betas that minimizes the cost function
+    # Minimizing training the mse is not necessarily the best
+    return np.linalg.inv(Xe.T.dot(Xe)).dot(Xe.T).dot(y)
 
 def predict(Xe, B):
-    """
-    Multivariate Linear Regression 
-    – Setup Assumption: Height = a + b×MomHeight+c×DadHeight
-    Model: y = β1 + β2X1 + β3X2 
-    Vectorised Approach: Model y = Xβ
-
-    Returns
-    -------
-    None.
-
-    """
-    y = np.dot(Xe,B)
-    return y
+    # predect y by taking dot product of extended X and betas
+    # Model: y = β1 + β2X1 + β3X2, or, Vectorised Approach: Model y = Xβ
+    #print("asdasd\n",Xe,"\n",B)
+    return np.dot(Xe,B)
 
 ### GRADIENT DESCENT
 def b_next(Xe, y, beta, alpha):
     return beta - alpha * np.dot( Xe.T, np.dot(Xe, beta) - y)
     
-#store cost values, not the beta values
-# j is the index of the forloop
-def gradient_descent(Xe, y, beta, alpha=.00001, n=1000000):
-    bj = b_next(Xe, y, beta, alpha)
-    betas = [bj]
+def gradient_descent2(Xe, y, alpha=.001, n=1000):
+    # Step 1 - Set an initial beta. Fill it with zeros (as suggested in lecture video)
+    # Use size of num of vectors/columns
+    beta = np.zeros(np.ma.size(Xe,1))
+    
+    # Step 2 - Initilaize b[0]
+    betas = [b_next(Xe, y, beta, alpha)]
+    
+    # Step 3 - Iterate over n
     for j in range(1,n):
+        # use try/except to prevent adding inf and similar errors to betas
         try:
             bj = b_next(Xe, y, betas[j-1], alpha)
         except:
             print("Error\n", traceback.print_exc())
             break
+        # do not add inf values or repeat values. if so, halt and return
+        # in other words, no need to complete all n iterations
         if np.isfinite(bj).all() and not np.all(np.equal(bj,betas[j-1])):
             betas.append(bj)
         else:
             break
     return betas
-### END GRADIENT DESCENT
 
-
-
-
-
+def predict_gradient(X, zx, betas):
+    # Step 1 - Combine the predication to your other data
+    X_plus_z = np.append(X, zx,0)
+    
+    # Step 2 - Normalize the combined data
+    X_plus_z_normalized = feature_normalization( X_plus_z )
+    
+    # Step 3 - Extract the normalized prediction data
+    z_normalized = np.array(  [X_plus_z_normalized[-1]]   )
+    
+    # Step 4 - Predict the y
+    zy = predict(extended_matrix(z_normalized),betas[-1])
+    
+    return zy

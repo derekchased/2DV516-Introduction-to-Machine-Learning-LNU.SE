@@ -19,16 +19,22 @@ Created on Thu Apr  13 06:36:37 2020
 
 import assignment2_exerciseA
 import assignment2_exercise1
+import assignment2_exercise2
 
 def exerciseA():
-    print ("\n<-- Assignment 2, Exercise A -->\n")
-    #assignment2_exerciseA.exerciseA_1()
-    #assignment2_exerciseA.exerciseA_1_gradient()
+    print ("\n\n<-- Assignment 2, Exercise A -->\n")
+    assignment2_exerciseA.exerciseA_1()
+    assignment2_exerciseA.exerciseA_1_gradient()
     
 def exercise1():
-    print ("\n<-- Assignment 2, Exercise 1 -->\n")
-    assignment2_exercise1.exercise1_1()
-    #assignment2_exercise1.exercise1_2()
+    print ("\n\n<-- Assignment 2, Exercise 1 -->\n")
+    assignment2_exercise1.exercise1()
 
-#exerciseA()
+def exercise2():
+    print ("\n\n<-- Assignment 2, Exercise 2 -->\n")
+    assignment2_exercise2.exercise2_1()
+    pass
+
+exerciseA()
 exercise1()
+exercise2()

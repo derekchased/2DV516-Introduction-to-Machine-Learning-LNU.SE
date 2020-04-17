@@ -14,189 +14,106 @@ import numpy as np
 
 def exercise2_1():
     print ("\nExercise 2.1")
-    pass
 
-# Step 1 - Load Data
-Csv_data = np.loadtxt("./A2_datasets_2020/housing_price_index.csv",delimiter=',') # load csv
-
-X = Csv_data[:,0:1]
-y = Csv_data[:,1]
-years = np.array(X)+1975
-
-# Step 2 - Plot the data
-fig, ax = plt.subplots(1,1)
-fig.suptitle('Ex 2, Småland', fontsize=14)
-fig.tight_layout(pad=1.0,rect=[0, 0.03, 1, 0.95])
-ax.set(xlabel="Year",ylabel="Price Index")
-ax.plot(years,y,c="r")
-
-# Step 3 and 4
-# 3- Find minimum cost by iterating over different degrees
-# 4- Plot the curve obtained for each degree we try
-
-rows = 2
-cols = 2
-fig, ax = plt.subplots(rows,cols,sharey=True,sharex=True)
-fig.suptitle('Ex 2, Polynomial Fit', fontsize=14)
-fig.tight_layout(pad=1.0,rect=[0, 0.03, 1, 0.95])
-
-fig.text(0.5, -.05, 'x', ha='center')
-fig.text(-0.01, 0.5, 'F(x)', va='center', rotation='vertical')
-
-Xe, mincost, ind, deg, j, k = None, None, None, 4,0,0
-for i in range(1,deg+1):
-    # Compute 
-    Xe = alrf.extended_matrix_deg(X,i)
-    b = alrf.normal_equation(Xe,y)
-    cost = alrf.cost_function(Xe,b,y)
-    f_x = np.dot(Xe,b) #f(x) is the Xe matrix dot the betas
+    # Step 1 - Load Data
+    Csv_data = np.loadtxt("./A2_datasets_2020/housing_price_index.csv",delimiter=',') # load csv
     
-    # keep track of the minimum value
-    try:
-        if cost < mincost:
+    X = Csv_data[:,0:1]
+    y = Csv_data[:,1]
+    years = np.array(X)+1975 # for label on plot
+    
+    # Step 2 - Plot the data
+    fig, ax = plt.subplots(1,1)
+    fig.suptitle('Ex 2.1, Housing price index Småland', fontsize=14)
+    fig.tight_layout(pad=1.0,rect=[0, 0.03, 1, 0.95])
+    ax.set(xlabel="Year",ylabel="Price Index")
+    ax.plot(years,y,c="r")
+    
+    # Step 3 and 4
+    # 3- Find minimum cost by iterating over different degrees
+    # 4- Plot the curve obtained for each degree we try
+    
+    # setup plot
+    rows, cols = 2, 2
+    fig, ax = plt.subplots(rows,cols,sharey=True,sharex=True)
+    fig.suptitle('Ex 2.1, Polynomial fit', fontsize=14)
+    fig.tight_layout(pad=1.0,rect=[0, 0.03, 1, 0.95])
+    fig.text(0.5, -.05, 'x', ha='center')
+    fig.text(-0.01, 0.5, 'F(x)', va='center', rotation='vertical')
+    
+    # initalize vars for iterating over degrees
+    Xe, mincost, ind, deg, j, k,b = None, None, None, 4,0,0,None
+    for i in range(1,deg+1):
+        # Compute vars
+        Xe = alrf.extended_matrix_deg(X,i)
+        b = alrf.normal_equation(Xe,y)
+        cost = alrf.cost_function(Xe,b,y)
+        pred = alrf.predict(Xe, b)
+        
+        # keep track of the minimum cost value
+        try:
+            if cost < mincost:
+                mincost = cost
+                ind = i
+        except:
             mincost = cost
             ind = i
-    except:
-        mincost = cost
-        ind = i
         
-    ax[j][k].scatter(years,y,s=1,c="r")
-    ax[j][k].plot(years,f_x,)
+        # plot actual data (scatter points) against our curve (plot line)
+        ax[j][k].scatter(years,y,s=1,c="r")
+        ax[j][k].plot(years,pred)
+        
+        # xlabelposition="above"
+        ax[j][k].set(xlabel="Degree "+str(i)+ ", MSE ="+str(round(cost,1)))
+        k +=1
+        if k==cols:
+            j+=1
+            k =0
+        
+    print("\nEx 2.2 - I believe that of these 4 degrees, that degree of 4",
+          "gives the best fit to the data. Firstly, the MSE is lowest on",
+          "this degree. While MSE of the training data is not terribyly",
+          "reliable, it is one of the best indicators that we have for this",
+          "exercise. Secondly, by looking at the plot against the data, ",
+          "we can see that the line fits to the data points the best, it",
+          "has the least amount of distance visually (which is proven",
+          "by the minimal MSE. Finally, for the data presented, there are",
+          "about 9 inflection points. As described in the lecture, the ",
+          "number of inflection points is a good indicator of the degree",
+          "of the polynomial- they should match up. Therefore, I would assume",
+          "that a 9th degree polynomial fit would have a minimal MSE here,",
+          "and fit the data points the closest. Indeed, I did test with 9",
+          "degrees and the MSE was in fact at it's minimal with a 9 degree",
+          "polynomial.")
     
-    # xlabelposition="above"
-    ax[j][k].set(xlabel="Degree "+str(i)+ ", MSE ="+str(round(cost,1)))
-    k +=1
-    if k==cols:
-        j+=1
-        k =0
-    print("Degree",i," - MSE",cost)
-print("\n==>Degree",ind,"has a minimum cost of ", mincost)
-plt.show()
-"""
-# Step 3 - Plot data
-fig, ax = plt.subplots(2,3)
-fig.suptitle('Ex A.1, Girl Height in inches', fontsize=14)
-fig.tight_layout(pad=1.0,rect=[0, 0.03, 1, 0.95])
-titles = ["CudaCores","BaseClock","BoostClock","MemorySpeed",
-          "MemoryConfig","MemoryBandwidth","BenchmarkSpeed"]
-# iterate over columns of Xn by using the Transpose of Xn
-i, j = 0,0
-for ind, xi in enumerate(Xn.T):
-    ax[i][j].scatter(xi,y)
-    ax[i][j].set_title(titles[ind])
-    j +=1
-    if j==3: i,j = 1,0
-plt.show()
-"""
-
-
-
-
-"""
-# Step 2 - Normalize Data
-Xn = alrf.feature_normalization(X)
-
-# Step 3 - Plot data
-fig, ax = plt.subplots(2,3)
-fig.suptitle('Ex A.1, Girl Height in inches', fontsize=14)
-fig.tight_layout(pad=1.0,rect=[0, 0.03, 1, 0.95])
-titles = ["CudaCores","BaseClock","BoostClock","MemorySpeed",
-          "MemoryConfig","MemoryBandwidth","BenchmarkSpeed"]
-# iterate over columns of Xn by using the Transpose of Xn
-i, j = 0,0
-for ind, xi in enumerate(Xn.T):
-    ax[i][j].scatter(xi,y)
-    ax[i][j].set_title(titles[ind])
-    j +=1
-    if j==3: i,j = 1,0
-plt.show()
-
-
-# Step 3a) - Compute β using the normal equation β = (XeT Xe)−1XeT y 
-# where Xe is the extended nor- malized matrix 
-# [1, X1, . . . , X6]. What is the predicted benchmark result for a 
-# graphic card with the following (non-normalized) feature values?
-# 2432, 1607, 1683, 8, 8, 256 The actual benchmark result is 114.
-
-# Normal Equation
-Xe = alrf.extended_matrix(X)
-b = alrf.normal_equation(Xe,y)
-
-# Predict
-arr_pred = [[2432, 1607,1683,8, 8, 256]]
-pred = alrf.extended_matrix(np.array(arr_pred))
-y_pred = alrf.predict(pred,b)[0]
-print("Predicted benchmark result", y_pred,"\nActual benchmark result 114",)
-
-# Step 4 - What is the cost J(β) when using the β computed by 
-# the normal equation above?
-cost = alrf.cost_function(Xe,b,y)
-print("The cost J(β) using the normal equation is",cost)
-
-
-# Step 5 - Gradient Descent
-# a)Find (and print) hyperparameters (α, N ) such that you get within 1% of 
-# the final cost for the normal equation.
-
-### Gradient
-# Step 1 - Feature Normalize X
-#X_fnormalized_grad = alrf.feature_normalization(Heights_X_parent)
-#Xn
-
-# Step 2 - Extend the normalized matrix
-#Xe_grad = alrf.extended_matrix(X_fnormalized_grad)
-Xe_n = alrf.extended_matrix(Xn)
-
-# Step 3 - Set an initial beta. Fill it with zeros. Use size of num of vectors/columns
-beta_grad_start = np.zeros(np.ma.size(Xe_n,1))
-
-# Step 4 - Get the gradient descent array
-alpha, n = .01, 10000
-beta_grad_iterations = alrf.gradient_descent(Xe_n, y, beta_grad_start,alpha,n)
-
-# Step 5 - Take the most recent/last beta value
-beta_grad_final = beta_grad_iterations[-1]
-
-# Step 6 - Calculate cost function for each beta
-J_gradient = []
-for i,j in enumerate(beta_grad_iterations):
-    J_grad = alrf.cost_function(Xe_n,beta_grad_iterations[i],y)
-    J_gradient.append(J_grad)
+    print("\nEx 2.3")
     
-fig, ax1 = plt.subplots()
-fig.suptitle('Ex A.1 Gradient Descent, alpha = '+str(alpha), fontsize=14)
-ax1.set(xlabel="Number of iterations = "+str(len(beta_grad_iterations)),ylabel="Cost J, min = "+str(round(J_gradient[-1],3)))
-ax1.plot(np.arange(0,len(beta_grad_iterations)),J_gradient)
-plt.xlim(0, len(beta_grad_iterations))
-plt.show()
-grad_cost = J_gradient[-1] 
-print("The J(β) using gradient descent is",str(grad_cost),"which is within",str(  100*abs(grad_cost-cost)/cost),"percent of normal cost. Less than 1%!")
-
-
-# (b) What is the predicted benchmark result for the example 
-# graphic card presented above?
-
-# Step 1 - Create prediction array
-#heights_to_predict = np.array([[65,70]])
-#arr_pred
-
-# Step 2 - Add heights that you want to predict to the other heights
-#Heights_plus_pred = np.append(Heights_X_parent, heights_to_predict,0)
-X_plus_pred = np.append(X, arr_pred,0)
-
-# Step 3 - Normalize the new heights matrix
-#Normalized_heights_plus_pred = alrf.feature_normalization( Heights_plus_pred )
-X_plus_pred_normalized = alrf.feature_normalization( X_plus_pred )
-
-# Step 4 - Extract the normalized heights that you need to predict
-#Normalized_pred2 = np.array(  [Normalized_heights_plus_pred[-1]]   )
-X_plus_pred_normalized_extracted = np.array(  [X_plus_pred_normalized[-1]]   )
-
-# Step 5 - Extend the predictions matrix
-#pred_ex_grad = alrf.extended_matrix(Normalized_pred2)
-pred_ex_grad = alrf.extended_matrix(X_plus_pred_normalized_extracted)
-
-# Step 6 - Predict the y
-#y_parents_grad = alrf.predict(pred_ex_grad,beta_grad_final)
-y_grad = alrf.predict(pred_ex_grad,beta_grad_final)
-print("The predicted benchmark using gradient descent is:", y_grad[0])"""
+    print("\nA housing price index (HPI) measures the price changes of", 
+          "residential housing as a percentage change from some specific",
+          "start date (which has HPI of 100)- Wikipedia.")
+    
+    print("\nSo, we will start our analysis in 1980, which has a value of 100",
+          "Jonas purchased his house in 2015 for 2.3 million, so in terms of",
+          "1980, the price would be 0.404929577 million.")
+    
+    
+    #index_2015, price_2015_million = 568, 2.3
+    #ratio_2015 = 
+    pred_2022_index = alrf.predict(alrf.extended_matrix_deg( np.array([[47]]),4), b)[0]
+    
+    # using {pred_2022_index} with some outside math done in excel
+    pred_2022_price_in_millions = 3.235387324
+    
+    print("Now we can use our model to predict the housing index in 2022. Using",
+          "the X value of 47 the predict housing index in 2022 is",
+          str(round(pred_2022_index))," and the corresponding price is",
+          str(round(pred_2022_price_in_millions,4)),"million sek")
+    
+    print("\nI do believe the answer is somewhat realistic, in the USA we would",
+          "say 'it's in the ballpark'. However, the data has many inflection",
+          "points and there is no way to tell exactly where the actual price will",
+          "be in 2022- we don't know which way the data will inflect.")
+    
+        #print("Degree",i," - MSE",cost)
+    #print("==>Degree",ind,"has a minimum cost of ", mincost)
+    plt.show()
