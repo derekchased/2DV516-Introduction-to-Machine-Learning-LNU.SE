@@ -1,0 +1,100 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Apr 13 14:49:50 2020
+
+@author: Derek Yadgaroff, derek.chase84@gmail.com
+
+@NOTICE
+    The vectorised Cost Function, Normal Equation, and Gradient Descent are 
+    identical to the case y = β1 + β2x! ⇒ A proper Python solution 
+    can be reused
+
+"""
+import numpy as np
+import traceback
+
+np.set_printoptions(30)
+np.seterr("raise")
+
+# training MSE
+# if zero we have perfect fit
+# with respect to training data
+def cost_function(Xe, beta, y):
+    j = np.dot(Xe,beta)-y
+    J = (j.T.dot(j))/len(y)
+    return J
+
+def extended_matrix(X):
+    return np.c_[np.ones((len(X),1)),X]
+
+def extended_matrix_deg(X,deg=1):
+    assert deg >= 1 # if degree is less than 1, throw an error
+    _c = np.ones((len(X),1))
+    for i in range(deg):
+        _c = np.c_[_c,X**(i+1)]    
+    return _c
+
+def feature_normalization(X):
+    # compute mean and stdev over axis 0, the feature vector (down the column)
+    mean = np.mean(X,0)
+    stddev = np.std(X,0)
+    
+    # elementwise difference
+    diff = np.subtract(X,mean)
+    
+    # elementwise division
+    normalized = np.divide(diff,stddev)
+    
+    # for each feature, stddev should be 1 and mean should be 0
+    #print("stddev of normalized", np.std(normalized,0))    
+    #print("mean of normalized", np.mean(normalized,0))    
+    
+    return normalized  
+
+def normal_equation(Xe, y):
+    #minimizes cost function, can be seen as training MSE. Minimizing training mse is bad...not necessarily best
+    beta = np.linalg.inv(Xe.T.dot(Xe)).dot(Xe.T).dot(y)
+    return beta
+
+def predict(Xe, B):
+    """
+    Multivariate Linear Regression 
+    – Setup Assumption: Height = a + b×MomHeight+c×DadHeight
+    Model: y = β1 + β2X1 + β3X2 
+    Vectorised Approach: Model y = Xβ
+
+    Returns
+    -------
+    None.
+
+    """
+    y = np.dot(Xe,B)
+    return y
+
+### GRADIENT DESCENT
+def b_next(Xe, y, beta, alpha):
+    return beta - alpha * np.dot( Xe.T, np.dot(Xe, beta) - y)
+    
+#store cost values, not the beta values
+# j is the index of the forloop
+def gradient_descent(Xe, y, beta, alpha=.00001, n=1000000):
+    bj = b_next(Xe, y, beta, alpha)
+    betas = [bj]
+    for j in range(1,n):
+        try:
+            bj = b_next(Xe, y, betas[j-1], alpha)
+        except:
+            print("Error\n", traceback.print_exc())
+            break
+        if np.isfinite(bj).all() and not np.all(np.equal(bj,betas[j-1])):
+            betas.append(bj)
+        else:
+            break
+    return betas
+### END GRADIENT DESCENT
+
+
+
+
+
