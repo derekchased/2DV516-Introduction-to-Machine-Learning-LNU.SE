@@ -15,22 +15,22 @@ import assignment1_knn_functions as knn_funcs
 def get_polynomial_data():
     data = np.loadtxt("polynomial200.csv", delimiter=',')
     Xtrain = data[:100,:];
-    ytest = data[100:200,:];
-    return Xtrain, ytest    
+    Xtest = data[100:200,:];
+    return Xtrain, Xtest    
 
 def exercise2_1():
     print ("\nExercise 2.1")
-    Xtrain, ytest = get_polynomial_data()
+    Xtrain, Xtest = get_polynomial_data()
     print ("Loads data. See exercise 2.2 for plot showing data.")
 
 def exercise2_2():
     print ("\nExercise 2.2")
-    Xtrain, ytest = get_polynomial_data()
+    Xtrain, Xtest = get_polynomial_data()
     plt.style.use('default')
     fig, (ax1, ax2) = plt.subplots(1,2, sharey=True)
     fig.suptitle('Ex 2.2, Side-by-Side', fontsize=14)
     ax1.scatter(Xtrain[:,0],Xtrain[:,1],c='#40925a',marker='1',label="Training Data")
-    ax2.scatter(ytest[:,0],ytest[:,1],c='#e82d8f',marker='.',label="Testing Data")
+    ax2.scatter(Xtest[:,0],Xtest[:,1],c='#e82d8f',marker='.',label="Testing Data")
     ax1.legend()
     ax2.legend()
     ax1.set_ylabel('f(x)')
@@ -38,27 +38,12 @@ def exercise2_2():
     print("See plot.")
     
 def exercise2_3():
-    """ For the regression, I was not able to finish this exercise. 
-    - I understand the concept that regression is for a continuous function
-    rather than a classification. 
-    - I understand that we the nearest neighbors based on the X coordinate,
-    take the corresponding Y values of the k nearest neighbors, proivde the
-    mean and that becomes the y output of f(x)
-    - However, I was not able to translate this conecpt into code. I will
-    continue to study and work with the TA's to achieve full familiarty
-    - In my solution, I have trained the data to itself, and then calculate
-    the regression. So for k=1, the line fits all the points. 
-    """
-    
-    
     print ("\nExercise 2.3")
     
     # load data
-    data = np.loadtxt("polynomial200.csv", delimiter=',')
-    Xtrain = data[:100,:];
-    ytest = data[100:200,:];
+    Xtrain, Xtest = get_polynomial_data()
     
-    # sort by X
+    # sort by X (for readability)
     Xtrain_sorted_by_x = Xtrain[Xtrain[:,0].argsort()]
     
     # interval, and create steps
@@ -67,8 +52,15 @@ def exercise2_3():
     #xrange = np.arange(x_min, x_max, h)
     
     for k in range(1,8,2):
-        # train data
-        sorted_distances_indeces = knn_funcs.train(Xtrain_sorted_by_x, Xtrain_sorted_by_x)
+        # train data using first columns
+        sorted_distances_indeces = knn_funcs.train(
+            Xtrain_sorted_by_x[:,0].reshape(-1, 1), 
+            Xtrain_sorted_by_x[:,0].reshape(-1, 1))
+        
+        #predict Xtest
+        sorted_distances_indeces_test = knn_funcs.train(
+            Xtrain_sorted_by_x[:,0].reshape(-1, 1),
+            Xtest[:,0].reshape(-1, 1)) 
         
         # extract the first column
         xt1= Xtrain_sorted_by_x[:,1]
@@ -102,6 +94,29 @@ def exercise2_3():
         plt.title("polynomial_train, k = "+str(k)+", MSE = " + str(MSE)) # gives the figure a title on top
         plt.show()
         
-        print("MSE =", MSE )
+        print("\nk= "+str(k),"\nTRAIN MSE =", MSE )
+        
+        
+        # list of f(x) predictions
+        y_pred = []
+        # predict the test here
+        for dist in sorted_distances_indeces_test:
+            # reduce list to first k items, then use the indeces to get the classifications from Y        
+            k_nearest_neighbors_of_Z_0 = np.array([  xt1[i] for i in dist[:k]])
+            # obtain the mean from the nearest neighbors
+            mean = k_nearest_neighbors_of_Z_0.sum()/k
+            # store the mode for this Z
+            y_pred.append( mean )
+        MSE = np.sum(( Xtest[:,1] - y_pred )**2)/len(y_pred) #calculate the MSE for the test
+        print("TEST MSE: %s" % (MSE))
         
     print ("See plots")
+
+exercise2_3()
+
+
+
+
+
+
+
