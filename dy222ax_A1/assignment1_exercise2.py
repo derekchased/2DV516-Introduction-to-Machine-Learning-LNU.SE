@@ -35,10 +35,12 @@ def exercise2_2():
     ax2.legend()
     ax1.set_ylabel('f(x)')
     plt.show()
-    print("See plot.")
+    print("See plot 2.2")
     
-def exercise2_3():
+def exercise2_3_and_4():
     print ("\nExercise 2.3")
+    print("See plots.")
+    print ("\nExercise 2.4")
     
     # load data
     Xtrain, Xtest = get_polynomial_data()
@@ -90,15 +92,14 @@ def exercise2_3():
                     c='g', # use the classes (0 or 1) as plot colors
                     ) 
         plt.scatter(Xtrain_sorted_by_x[:,0], Xtrain_sorted_by_x[:,1])
-        #plt.legend()
-        plt.title("polynomial_train, k = "+str(k)+", MSE = " + str(MSE)) # gives the figure a title on top
+        plt.title("Ex 2.3, polynomial_train, k = "+str(k)+", MSE = " + str(MSE)) # gives the figure a title on top
         plt.show()
         
-        print("\nk= "+str(k),"\nTRAIN MSE =", MSE )
-        
+        #print("\nk= "+str(k),"\nTRAIN MSE =", MSE )
         
         # list of f(x) predictions
         y_pred = []
+        
         # predict the test here
         for dist in sorted_distances_indeces_test:
             # reduce list to first k items, then use the indeces to get the classifications from Y        
@@ -108,15 +109,18 @@ def exercise2_3():
             # store the mode for this Z
             y_pred.append( mean )
         MSE = np.sum(( Xtest[:,1] - y_pred )**2)/len(y_pred) #calculate the MSE for the test
-        print("TEST MSE: %s" % (MSE))
-        
-    print ("See plots")
+        print("K=",k," TEST MSE: %s" % (MSE))
 
-exercise2_3()
-
-
-
-
-
-
-
+def exercise2_5():
+    print("\nExercise 2.5")
+    print("\tThe best value of K is generally the one that has the minmum "+
+          "MSE value. There are some caveats, such as concerns with scale "+
+          "and performance and whether a 'more expensive' evaluation at some "+
+          "k is worth the extra overhead if it only has slightly better results"+
+          "In this case, we have chosen just a few small K values 1 through "+
+          "7, and our data set is not so large. So in this case, the k "+
+          "value 5 has the smallest MSE of 28.5. Therefore for this "+
+          "exercise, K=5 is the best choice.\n\tIf performance were an issue, "+
+          "for this example, we might be satisfied with K=3, which has a "+
+          "similar MSE value of 31.6. This MSE might be suitable for us "+
+          "depending on the circumstances.")

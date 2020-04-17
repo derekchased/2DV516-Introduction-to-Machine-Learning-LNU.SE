@@ -21,7 +21,8 @@ def exercise2():
     print ("\n<-- Assignment 1, Exercise 2 -->\n")
     assignment1_exercise2.exercise2_1()
     assignment1_exercise2.exercise2_2()
-    assignment1_exercise2.exercise2_3()
+    assignment1_exercise2.exercise2_3_and_4()
+    assignment1_exercise2.exercise2_5()
     
 def exercise3():
     print ("\n<-- Assignment 1, Exercise 3 -->\n")
