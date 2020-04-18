@@ -9,7 +9,8 @@ Created on Thu Apr 13 14:49:50 2020
 
 import numpy as np
 import matplotlib.pyplot as plt
-import assignment2_linear_regression_functions as alrf
+import assignment2_linear_regression_functions as lirf
+import assignment2_matrix_functions as amf
 import numpy as np
 
 def exercise2_1():
@@ -45,10 +46,10 @@ def exercise2_1():
     Xe, mincost, ind, deg, j, k,b = None, None, None, 4,0,0,None
     for i in range(1,deg+1):
         # Compute vars
-        Xe = alrf.extended_matrix_deg(X,i)
-        b = alrf.normal_equation(Xe,y)
-        cost = alrf.cost_function(Xe,b,y)
-        pred = alrf.predict(Xe, b)
+        Xe = amf.extended_matrix_deg(X,i)
+        b = lirf.normal_equation(Xe,y)
+        cost = lirf.cost_function(Xe,b,y)
+        pred = lirf.predict(Xe, b)
         
         # keep track of the minimum cost value
         try:
@@ -99,7 +100,7 @@ def exercise2_1():
     
     #index_2015, price_2015_million = 568, 2.3
     #ratio_2015 = 
-    pred_2022_index = alrf.predict(alrf.extended_matrix_deg( np.array([[47]]),4), b)[0]
+    pred_2022_index = lirf.predict(amf.extended_matrix_deg( np.array([[47]]),4), b)[0]
     
     # using {pred_2022_index} with some outside math done in excel
     pred_2022_price_in_millions = 3.235387324

@@ -9,7 +9,8 @@ Created on Thu Apr 13 14:49:50 2020
 
 import numpy as np
 import matplotlib.pyplot as plt
-import assignment2_linear_regression_functions as alrf
+import assignment2_linear_regression_functions as lirf
+import assignment2_matrix_functions as amf
 import numpy as np
 
 def exercise1():
@@ -21,7 +22,7 @@ def exercise1():
     y = Csv_data[:,6]
     
     # Step 2 - Normalize Data
-    Xn = alrf.feature_normalization(X)
+    Xn = amf.feature_normalization(X)
     
     # Step 3 - Plot data
     fig, ax = plt.subplots(2,3)
@@ -41,35 +42,35 @@ def exercise1():
     plt.show()
     
     # Step 4 - Get extended matrix
-    Xe = alrf.extended_matrix(X)
+    Xe = amf.extended_matrix(X)
     
     # Step 5 - Get betas using normal equation
-    betas = alrf.normal_equation(Xe,y)
+    betas = lirf.normal_equation(Xe,y)
     
     # Step 6 - Create prediction matrix
     pred = np.array([[2432, 1607,1683,8, 8, 256]])
     
     # Step 7 - Make prediction
-    y_pred = alrf.predict(alrf.extended_matrix(pred),betas)[0]
+    y_pred = lirf.predict(amf.extended_matrix(pred),betas)[0]
     print("Predicted benchmark:", y_pred," \tActual benchmark: 114",)
     
     # Step 9 - What is the cost J(β) when using the β computed by 
     # the normal equation above?
-    normal_eq_cost = alrf.cost_function(Xe,betas,y)
+    normal_eq_cost = lirf.cost_function(Xe,betas,y)
     print("Cost:",normal_eq_cost)
     
     print ("\nExercise 1 - Gradient Descent")
     # Gradient - Step 1 - Normalize and Extend X
-    Xe_n = alrf.extended_matrix(alrf.feature_normalization(X)) 
+    Xe_n = amf.extended_matrix(amf.feature_normalization(X)) 
     
     # Step 2 - Calculate betas using gradient descent
     alpha, n = .01, 1000
-    betas = alrf.gradient_descent2(Xe_n, y, alpha,n)
+    betas = lirf.gradient_descent(Xe_n, y, alpha,n)
     
     # Step 3 - Calculate cost function for each beta
     J_gradient = []
     for i,j in enumerate(betas):
-        J_grad = alrf.cost_function(Xe_n,betas[i],y)
+        J_grad = lirf.cost_function(Xe_n,betas[i],y)
         J_gradient.append(J_grad)
         
     grad_cost = J_gradient[-1] 
@@ -78,6 +79,6 @@ def exercise1():
     print("Gradient cost within",str(  round(100*abs(grad_cost-normal_eq_cost)/normal_eq_cost,5) )+"% of normal cost -> This is less than 1%!")
     
     # Step XXX - Predict benchmark
-    y_parents_grad = alrf.predict_gradient(X,np.array([[2432, 1607,1683,8, 8, 256]]), betas)
+    y_parents_grad = lirf.predict_gradient(X,np.array([[2432, 1607,1683,8, 8, 256]]), betas)
     
     print("Predicted benchmark:",y_parents_grad[0])

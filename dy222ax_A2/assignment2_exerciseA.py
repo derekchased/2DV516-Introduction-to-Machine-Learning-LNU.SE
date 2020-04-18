@@ -9,7 +9,8 @@ Created on Thu Apr 13 14:49:50 2020
 
 import numpy as np
 import matplotlib.pyplot as plt
-import assignment2_linear_regression_functions as alrf
+import assignment2_linear_regression_functions as lirf
+import assignment2_matrix_functions as amf
 
 def load_data():
     csv_data = np.loadtxt("./A2_datasets_2020/girls_height.csv") # load csv
@@ -34,18 +35,18 @@ def exerciseA_1():
     plt.show()
     
     # A1.2 - Compute Extended Matrix
-    Xe_parents = alrf.extended_matrix(X)
+    Xe_parents = amf.extended_matrix(X)
     print("Extended Matrix of Parent's Heights\n",Xe_parents,"\n")
     
     # A1.3 - Compute Normal Equation and Make a Prediction
-    Beta_normal_parents = alrf.normal_equation(Xe_parents,y)
-    y_parents_normal_eq = alrf.predict(alrf.extended_matrix(np.array([[65,70]])),Beta_normal_parents)
+    Beta_normal_parents = lirf.normal_equation(Xe_parents,y)
+    y_parents_normal_eq = lirf.predict(amf.extended_matrix(np.array([[65,70]])),Beta_normal_parents)
     print("==> Prediction of girl height with parental heights of 65,70\n", 
           y_parents_normal_eq[0],"\n")
     
     # A1.4 - Apply Feature Normalization, plot dataset, 
     # heights should be centered around 0 with a standard deviation of 1.
-    X_feature_normalized_heights = alrf.feature_normalization(X)
+    X_feature_normalized_heights = amf.feature_normalization(X)
     fig, (ax1, ax2) = plt.subplots(1,2,sharey=True,sharex=True)
     fig.suptitle('Ex A.1, Girl Height in inches', fontsize=14)
     ax1.set(xlabel="Mom Height Normalized",ylabel="Girl Height")
@@ -57,23 +58,23 @@ def exerciseA_1():
     # A1.5 - Compute the extended matrix Xe and apply the Normal equation 
     # on the normalized version of (65.70). The prediction should 
     # still be 65.42 inches.
-    Xe_feature_normalized_heights = alrf.extended_matrix(X_feature_normalized_heights)
-    Beta_normal_parents_normalized = alrf.normal_equation(Xe_feature_normalized_heights,y)
+    Xe_feature_normalized_heights = amf.extended_matrix(X_feature_normalized_heights)
+    Beta_normal_parents_normalized = lirf.normal_equation(Xe_feature_normalized_heights,y)
     heights_to_predict = np.array([[65,70]])
     Heights_plus_pred = np.append(X, heights_to_predict,0)
-    Normalized_heights_plus_pred = alrf.feature_normalization( Heights_plus_pred )
+    Normalized_heights_plus_pred = amf.feature_normalization( Heights_plus_pred )
     Normalized_heights_to_pred = np.array(  [Normalized_heights_plus_pred[-1]]   )
-    y_parents_pred = alrf.predict(alrf.extended_matrix(Normalized_heights_to_pred),Beta_normal_parents_normalized)
+    y_parents_pred = lirf.predict(amf.extended_matrix(Normalized_heights_to_pred),Beta_normal_parents_normalized)
     print("==> Prediction of girl height with normalized parental heights of 65,70\n", 
           y_parents_pred[0],"\n")
     
     # A1.6 - Implement the cost function J(β) = n1 (Xeβ − y)T (Xeβ − y) as a 
     # function of parameters Xe,y,β. The cost for β from the Normal 
     # equation should be 4.068.
-    cost_function_normalized = alrf.cost_function(Xe_feature_normalized_heights,Beta_normal_parents_normalized,y)
+    cost_function_normalized = lirf.cost_function(Xe_feature_normalized_heights,Beta_normal_parents_normalized,y)
     print("==> Cost Function (normalized)\n",cost_function_normalized,"\n")
     
-    cost_function = alrf.cost_function(Xe_parents,
+    cost_function = lirf.cost_function(Xe_parents,
                                        Beta_normal_parents,y)
     print("==> Cost Function not-normalized\n",cost_function,"\n")
 
@@ -85,15 +86,15 @@ def exerciseA_1_gradient():
     
     ### Gradient
     # Step 1 - Normalize and Extend X
-    Xe_normalized = alrf.extended_matrix(alrf.feature_normalization(X)) 
+    Xe_n = amf.extended_matrix(amf.feature_normalization(X)) 
     
     # Step 2 - Calculate betas using gradient descent
-    betas = alrf.gradient_descent2(Xe_normalized, y, alpha=.001,n=1000)
+    betas = lirf.gradient_descent(Xe_n, y, alpha=.001,n=1000)
     
     # Step 3 - Calculate cost function for each beta
     J_gradient = []
     for i,j in enumerate(betas):
-        J_grad = alrf.cost_function(Xe_normalized,betas[i],y)
+        J_grad = lirf.cost_function(Xe_n,betas[i],y)
         J_gradient.append(J_grad)
     
     # Step 4 - Plot the cost over iterations
@@ -110,6 +111,6 @@ def exerciseA_1_gradient():
     heights_to_predict = np.array([[65,70]])
     
     # 5b) Place in matrix
-    y_parents_grad = alrf.predict_gradient(X,heights_to_predict, betas)
+    y_parents_grad = lirf.predict_gradient(X,heights_to_predict, betas)
     
     print("==> The predicted height for a girl with parents (65.70) is:\n", round(y_parents_grad[0],2))
