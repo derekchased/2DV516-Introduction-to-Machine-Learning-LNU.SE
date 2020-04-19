@@ -20,6 +20,8 @@ Created on Thu Apr  13 06:36:37 2020
 import assignment2_exerciseA
 import assignment2_exercise1
 import assignment2_exercise2
+import assignment2_exerciseB
+import assignment2_exercise3
 
 def exerciseA():
     print ("\n\n<-- Assignment 2, Exercise A -->\n")
@@ -33,8 +35,21 @@ def exercise1():
 def exercise2():
     print ("\n\n<-- Assignment 2, Exercise 2 -->\n")
     assignment2_exercise2.exercise2_1()
-    pass
+
+def exerciseB():
+    print ("\n\n<-- Assignment 2, Exercise B -->\n")
+    assignment2_exerciseB.exercise1()
+
+def exercise3():
+    print ("\n\n<-- Assignment 2, Exercise 3 -->\n")
+    assignment2_exercise3.exercise1()
+
+
+
 
 exerciseA()
 exercise1()
 exercise2()
+exerciseB()
+exercise3()
+exercise4()
