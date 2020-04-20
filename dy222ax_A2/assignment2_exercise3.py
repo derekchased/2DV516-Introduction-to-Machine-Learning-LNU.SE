@@ -13,7 +13,10 @@ import assignment2_logistic_regression_functions as lorf
 import matplotlib.pyplot as plt
 
 
-def exercise1():
+def exercise3_1():
+    
+    print ("\nExercise 3")
+    
     # Ex 3.1 Part A
     
     # import data

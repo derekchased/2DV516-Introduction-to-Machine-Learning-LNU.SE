@@ -59,8 +59,10 @@ def gradient_descent(Xe_n, y, alpha=.005, n=1000, get_all_betas=False):
         
         # add new beta to list
         betas.append(beta)
-    if get_all_betas: return betas
-    return beta
+    if get_all_betas: 
+        return betas
+    else:
+        return beta
 
 def predict(to_predict, X, b):
     all_data = np.append(X,to_predict,0)

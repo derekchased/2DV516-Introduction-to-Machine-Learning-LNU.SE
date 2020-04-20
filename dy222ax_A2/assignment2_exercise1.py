@@ -13,7 +13,7 @@ import assignment2_linear_regression_functions as lirf
 import assignment2_matrix_functions as amf
 import numpy as np
 
-def exercise1():
+def exercise1_1():
     print ("\nExercise 1 - Normal Equation")
     # Step 1 - Load Data
     Csv_data = np.loadtxt("./A2_datasets_2020/GPUBenchmark.csv",delimiter=',') # load csv
@@ -26,7 +26,7 @@ def exercise1():
     
     # Step 3 - Plot data
     fig, ax = plt.subplots(2,3)
-    fig.suptitle('Ex 1, Multivariate Data Sets', fontsize=14)
+    fig.suptitle('Ex 1.1, Multivariate Data Sets', fontsize=14)
     fig.tight_layout(pad=1.0,rect=[0, 0.03, 1, 0.95])
     titles = ["CudaCores","BaseClock","BoostClock","MemorySpeed",
               "MemoryConfig","MemoryBandwidth","BenchmarkSpeed"]

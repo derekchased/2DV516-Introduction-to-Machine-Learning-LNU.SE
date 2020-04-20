@@ -21,7 +21,7 @@ Xe = amf.extended_matrix(X)
 Xe_n = amf.extended_matrix(amf.feature_normalization(X))
 
 
-def exercise1():
+def exerciseB_1():
     print("\nExercise B - Logistic Regression")
     
     # Ex B.1
@@ -88,9 +88,14 @@ def exercise1():
     
     
     
-    
-    
     # Plot also the linear decision boundary
+   
+    
+    
+    
+    
+    
+    # Plot also the logistic decision boundary
     Xn = amf.feature_normalization(X)
     X1 = Xn[:,0]
     X2 = Xn[:,1]

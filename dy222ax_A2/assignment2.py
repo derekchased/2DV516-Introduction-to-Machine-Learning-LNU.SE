@@ -22,6 +22,8 @@ import assignment2_exercise1
 import assignment2_exercise2
 import assignment2_exerciseB
 import assignment2_exercise3
+import assignment2_exercise4
+import assignment2_exercise5
 
 def exerciseA():
     print ("\n\n<-- Assignment 2, Exercise A -->\n")
@@ -30,7 +32,7 @@ def exerciseA():
     
 def exercise1():
     print ("\n\n<-- Assignment 2, Exercise 1 -->\n")
-    assignment2_exercise1.exercise1()
+    assignment2_exercise1.exercise1_1()
 
 def exercise2():
     print ("\n\n<-- Assignment 2, Exercise 2 -->\n")
@@ -38,14 +40,22 @@ def exercise2():
 
 def exerciseB():
     print ("\n\n<-- Assignment 2, Exercise B -->\n")
-    assignment2_exerciseB.exercise1()
+    assignment2_exerciseB.exerciseB_1()
 
 def exercise3():
     print ("\n\n<-- Assignment 2, Exercise 3 -->\n")
-    assignment2_exercise3.exercise1()
+    assignment2_exercise3.exercise3_1()
 
+def exercise4():
+    print ("\n\n<-- Assignment 2, Exercise 3 -->\n")
+    assignment2_exercise4.exercise4_1()
+    assignment2_exercise4.exercise4_2()
+    assignment2_exercise4.exercise4_4()
 
-
+def exercise5():
+    print ("\n\n<-- Assignment 2, Exercise 3 -->\n")
+    assignment2_exercise5.exercise5_1()
+    
 
 exerciseA()
 exercise1()
@@ -53,3 +63,4 @@ exercise2()
 exerciseB()
 exercise3()
 exercise4()
+exercise5()
