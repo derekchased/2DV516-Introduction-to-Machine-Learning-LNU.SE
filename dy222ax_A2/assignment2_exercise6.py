@@ -37,7 +37,7 @@ def exercise6_1():
     print ("\nExercise 6.1")
 
 def cost(X,y,j):
-    Xreduced = X[:,j-1].reshape(-1,1)
+    Xreduced = X[:,j].reshape(-1,1)
     #print(Xreduced)
     #print(Xreduced.shape)
     #2 - Extend Xn
@@ -54,9 +54,9 @@ def cost(X,y,j):
     
 #   Forward selection using breadth first recursion
 def compare(X, y, j=0):
+    #print("compare",j)
     #   End when you've got to the last column. Return the index and the cost
-    if j >= Xn.shape[1]:
-        #print("if",j)
+    if j >= Xn.shape[1]-1:
         return j, cost(X,y,j)
     else:
         #   Recurse over j+1
@@ -76,8 +76,31 @@ def compare(X, y, j=0):
 
 # 1 - Load Data    
 Xn, y = load_data()
-j, cost = compare(Xn,y)
+besti,bestcost = compare(Xn,y)
+print(besti,bestcost,Xn[:,besti],"\n\n")
 
+
+def compare2(X, y, j=0,k=2):
+    global Xbest,Xreamain
+    for i in range(k):
+        print(i)
+        ind = compare(X,y)[0]
+        print(ind)
+        Xbest = X[:,ind].reshape(-1,1)
+        print(Xbest)
+        Xe = amf.extended_matrix(Xbest)
+        
+        # 3 - Get betas using normal equation
+        betas = lirf.normal_equation(Xe,y)
+        
+        # 4 - Get Cost
+        normal_eq_cost = lirf.cost_function(Xe,betas,y)
+        print(normal_eq_cost)
+        
+        Xreamain = np.c_[ X[:,0:ind], X[:,ind+1:X.shape[1] ]]
+        print(Xreamain)
+        
+compare2(Xn,y)
 
 
 
