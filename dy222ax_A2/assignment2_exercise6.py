@@ -9,6 +9,11 @@ Created on Mon Apr 20 23:06:31 2020
 import numpy as np
 import assignment2_matrix_functions as amf
 import assignment2_linear_regression_functions as lirf
+from sklearn.model_selection import KFold
+from sklearn import linear_model
+from sklearn.metrics import mean_squared_error, r2_score
+
+
 
 """
 import matplotlib.pyplot as plt
@@ -56,17 +61,18 @@ def cost(X,y,j):
 def compare(X, y, j=0):
     #print("compare",j)
     #   End when you've got to the last column. Return the index and the cost
-    if j >= Xn.shape[1]-1:
+    if j >= X.shape[1]-1:
+     #   print("if",j)
         return j, cost(X,y,j)
     else:
-        #   Recurse over j+1
+        #   Recurse over j+1... Will return the best feature from J+1 -> p
         jplusone, jplusone_cost = compare(X,y,j+1) 
         
         #   Calculate the current cost
         j_cost = cost(X,y,j)
         
-        #print("j1\t",jplusone," j+1C\t",jplusone_cost)
-        #print("j\t",j,"jC\t",j_cost)
+        print("j1\t",jplusone," j+1C\t",jplusone_cost)
+        print("j\t",j,"jC\t",j_cost)
         
         #   Compare j cost to the best j+1 cost, return whichever is best
         if j_cost <= jplusone_cost:
@@ -80,14 +86,28 @@ besti,bestcost = compare(Xn,y)
 print(besti,bestcost,Xn[:,besti],"\n\n")
 
 
-def compare2(X, y, j=0,k=2):
-    global Xbest,Xreamain
+def compare_M(X, y,k=1):
+    assert k>0
+    Xremain = X
+    M=[]
+    orig_indices = []
+
     for i in range(k):
-        print(i)
-        ind = compare(X,y)[0]
-        print(ind)
-        Xbest = X[:,ind].reshape(-1,1)
-        print(Xbest)
+        #print("k",i)
+        #print("Xremain",Xremain.shape,Xremain)
+        ind,cost = compare(Xremain,y)
+        #print(i,"ind",ind,"cost",cost)
+        #print("Xremain[:,ind]",Xremain[:,ind])
+        Xnext = Xremain[:,ind].reshape(-1,1)
+        try:
+            Xbest = np.c_[Xbest,Xnext]
+        except:
+            Xbest = Xnext
+        
+        #print(Xnext == X)
+        #print("ORIG INDEX", np.where(Xnext == X)[1])
+
+        # Extend matrix        
         Xe = amf.extended_matrix(Xbest)
         
         # 3 - Get betas using normal equation
@@ -95,68 +115,84 @@ def compare2(X, y, j=0,k=2):
         
         # 4 - Get Cost
         normal_eq_cost = lirf.cost_function(Xe,betas,y)
-        print(normal_eq_cost)
         
-        Xreamain = np.c_[ X[:,0:ind], X[:,ind+1:X.shape[1] ]]
-        print(Xreamain)
+        orig_index =  np.where(Xnext == X)[1][0]
+        orig_indices.append(orig_index)
         
-compare2(Xn,y)
+        M.append({"ind":i,"model_cost":normal_eq_cost,
+                  "original_index_of_added_feature":orig_index,
+                  "betas":betas,"model":Xbest})
+        
+        Xremain = np.c_[ Xremain[:,0:ind], Xremain[:,ind+1:X.shape[1] ]]
+        #print("\n\n",k,"==Xremain==\n",Xremain.shape,Xremain)
+    return (orig_indices,M)
+orig_indices, M = compare_M(Xn,y,Xn.shape[1])
 
-
-
-
-"""
-# Load the diabetes dataset
-#X, y = datasets.load_diabetes(return_X_y=True)
-
-# Use only one feature
-#X = X[:, np.newaxis, 2]
-
-# Split the data into training/testing sets
-#X_train = X[:-20]
-#X_test = X[-20:]
-X_train = X
-X_test = X
-
-# Split the targets into training/testing sets
-#y_train = y[:-20]
-#y_test = y[-20:]
-y_train = y
-y_test = y
-
-# Create linear regression object
-regr = linear_model.LinearRegression()
-
-# Train the model using the training sets
-regr.fit(X_train, y_train)
-
-# Make predictions using the testing set
-y_pred = regr.predict(X_test)
-
-# The coefficients
-print('Coefficients: \n', regr.coef_)
-# The mean squared error
-print('Mean squared error: %.2f' % mean_squared_error(y_test, y_pred))
-# The coefficient of determination: 1 is perfect prediction
-print('Coefficient of determination: %.2f' % r2_score(y_test, y_pred))
-
-# Plot outputs
-#plt.scatter(X_test, y_test,  color='black')
-#plt.plot(X_test, y_pred, color='blue', linewidth=3)
-#plt.scatter(X_test, y_test,  color='black')
-#plt.plot(X_test, y_pred, color='blue', linewidth=3)
-
-
-plt.xticks(())
-plt.yticks(())
-
-plt.show()
-
-ddd = X*np.array([ [0,1 ], [0,1 ]   ])
-ddd2 = X*np.array([ [1,0 ], [1,0 ]   ])
-ddd3 = X*np.array([ [1,1 ], [1,1 ]   ])
-"""
-
-
+#for m in M:
+    #print(m)
     
+    
+    
+kf = KFold(n_splits=3)
+#print(kf.get_n_splits(Xn))
+#print(kf)
 
+for ind, (train_index, test_index) in enumerate(kf.split(Xn)):
+    """print("\nFold:",ind)
+    print("TRAIN:", train_index, "TEST:", test_index)"""
+    X_train, X_test = Xn[train_index], Xn[test_index]
+    y_train, y_test = y[train_index], y[test_index]
+    #print(X_train,"\n", X_test)
+    #print(y_train,"\n", y_test)
+    orig_indices, M  = compare_M(X_train,y_train,X_train.shape[1])
+    
+    print("\nK Fold =",ind)
+    #print("orig_indices",orig_indices)
+    
+    #print("X_test_reduced",X_test_reduced)
+    Xnext = X_test[:,orig_indices[0]].reshape(-1,1)
+    X_test_reduced = Xnext
+    
+    for innerind,m in enumerate(M):    
+        print("\nModel =",innerind, ":: features =",orig_indices[0:innerind+1])
+        #print("model",m["model"])
+        #print("y_train",y_train)
+        #print("X_test",X_test)
+        model = m["model"]
+        
+        #print(X_test_reduced)
+
+        
+        # Create linear regression object
+        regr = linear_model.LinearRegression()
+        
+        # Train the model using the training sets
+        regr.fit(model, y_train)
+        
+        
+        
+        
+            
+        #print("hello",X_test_reduced)
+        
+        # Make predictions using the testing set
+        y_pred = regr.predict(X_test_reduced)
+        
+        # The coefficients
+        #print('Coefficients: \n', regr.coef_)
+        # The mean squared error
+        print('Mean squared error: %.2f'% mean_squared_error(y_test, y_pred))
+        # The coefficient of determination: 1 is perfect prediction
+        print('Coefficient of determination: %.2f'% r2_score(y_test, y_pred))
+        print(y_test)
+        print(np.round(y_pred,1))
+        
+        try:
+            Xnext = X_test[:,orig_indices[innerind+1]].reshape(-1,1)
+            X_test_reduced = np.c_[X_test_reduced,Xnext]
+        except:
+            pass
+        
+        
+        
+        

@@ -58,8 +58,8 @@ def exercise5():
     
 
 #exerciseA()
-exercise1()
-#exercise2()
+#exercise1()
+exercise2()
 #exerciseB()
 #exercise3()
 #exercise4()
