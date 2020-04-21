@@ -13,7 +13,7 @@ def extended_matrix(X):
     return np.c_[np.ones((len(X),1)),X]
 
 # extend for 1 feature, degree of 1 or more
-def extended_matrix_deg(X,deg=1):
+def extended_matrix_deg(X,deg=1, ones=True):
     assert deg >= 1 # if degree is less than 1, throw an error
     if(ones):
         _c = np.c_[np.ones((len(X),1)),X]
@@ -24,10 +24,13 @@ def extended_matrix_deg(X,deg=1):
     return _c
 
 # extend for 2 features, any degree more than 1
-def mapFeature(X1,X2,deg, ones=True): # Pyton
+def mapFeature(X1,X2,deg,ones=True): # Pyton
     assert deg > 1 # if degree is less than 1, throw an error
-    one = np.ones([len(X1),1])
-    Xe = np.c_[one,X1,X2] # Start with [1,X1,X2]
+    if ones:
+        one = np.ones([len(X1),1])
+        Xe = np.c_[one,X1,X2] # Start with [1,X1,X2]
+    else:
+        Xe = np.c_[X1,X2] # Start with [1,X1,X2]
     for i in range(2,deg+1):
         for j in range(0,i+1):
             Xnew = X1**(i-j)*X2**j # type (N)
