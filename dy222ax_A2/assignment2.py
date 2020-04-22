@@ -48,23 +48,27 @@ def exercise2():
 def exercise3():
     print ("\n\n<-- Assignment 2, Exercise 3 -->\n")
     assignment2_exercise3.exercise3_1()
+    assignment2_exercise3.exercise3_2()
+    assignment2_exercise3.exercise3_6()
 
 def exercise4():
-    print ("\n\n<-- Assignment 2, Exercise 3 -->\n")
+    print ("\n\n<-- Assignment 2, Exercise 4 -->\n")
     assignment2_exercise4.exercise4_1()
     assignment2_exercise4.exercise4_2()
+    assignment2_exercise4.exercise4_3()
     assignment2_exercise4.exercise4_4()
 
 def exercise5():
-    print ("\n\n<-- Assignment 2, Exercise 3 -->\n")
+    print ("\n\n<-- Assignment 2, Exercise 5 -->\n")
     assignment2_exercise5.exercise5_1()
 
 def exercise6():
-    print ("\n\n<-- Assignment 2, Exercise 3 -->\n")
-    assignment2_exercise5.exercise6_1()
+    print ("\n\n<-- Assignment 2, Exercise 6 -->\n")
+    assignment2_exercise6.exercise6_1()
+    assignment2_exercise6.exercise6_2()
 
 def exercise7():
-    print ("\n\n<-- Assignment 2, Exercise 3 -->\n")
+    print ("\n\n<-- Assignment 2, Exercise 7 -->\n")
     assignment2_exercise7.exercise7_1()    
 
 exerciseA()
@@ -73,7 +77,7 @@ exercise1()
 exercise2()
 exercise3()
 exercise4()
-exercise5()
+#exercise5()
 exercise6()
 exercise7()
 

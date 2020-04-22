@@ -26,32 +26,26 @@ def load_data():
     
 
 def exercise5_1():
-    """
-    Use Logistic regression and mapFeatures from the previous exercise to 
-    construct nine different classifiers, one for each of the degrees 
-    d ∈ [1, 9], and produce a figure containing a 3 × 3 pattern of subplots 
-    showing the corresponding decision boundaries. Make sure that you pass 
-    the argument C=10000
-    """
     print ("\nExercise 5.1")
-        
-
+    
+# load data
 X, y = load_data()
+
+# Separate vectors
 X1 = X[:,0]
 X2 = X[:,1]
-degree = 9
+
+# Create extended matrix of degree 9
+degree = 4
 Xe = amf.mapFeature(X1,X2,degree,ones=False) # No 1-column!
-# C is the inverse of regularization strength; must be a
-# positive float. Smaller values specify stronger regularization. # Default is C = 1.0. tol= 1e-6 ==> reduced tolerance
-logreg = LogisticRegression(solver="lbfgs", C=1000.0, tol=1e-6)
+
+# Create LogisticRegression object and fit it with our data
+logreg = LogisticRegression(C=1.0, tol=1e-6,max_iter=10000)
 logreg.fit(Xe,y) # fit the model with data
 
 
-
-
-
-
-h=.01 # stepsize in the mesh
+# Create meshgrid
+h=.01
 x_min, x_max = X1.min()-0.1, X1.max()+0.1
 y_min, y_max = X2.min()-0.1, X2.max()+0.1
 xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
@@ -63,8 +57,6 @@ XXe = amf.mapFeature(x1,x2,degree,False)
 y_pred=logreg.predict(XXe) # predict
 errors = np.sum(y_pred!=y) # compare y with y_pred
 print("Training errors:", errors)
-
-
 
 classes = y_pred>0.5 # round off probabilities
 clz_mesh = classes.reshape(xx.shape) # return to mesh format

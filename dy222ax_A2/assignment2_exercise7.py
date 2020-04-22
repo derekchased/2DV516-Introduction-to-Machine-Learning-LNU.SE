@@ -109,7 +109,7 @@ def preprocess_One_Hot_Encoder(np_data,headers):
     y = np_data[:,-1].astype(float)
     return X, y, headers
 
-# 3- Normalize data using Standard Scalar (which uses the same method we used)
+"""# 3- Normalize data using Standard Scalar (which uses the same method we used)
 def plot_raw_data():
     scaler = StandardScaler()
     Xn = scaler.fit_transform(X)
@@ -119,7 +119,7 @@ def plot_raw_data():
 def plot_raw_data():
     for ind in range(X.shape[1]):
         plot_feature(X[:,ind].reshape(-1,1),y.reshape(-1,1),'b',headers[ind])
-
+"""
 # Regrssion using train_test_split
 def regression_train_test_split(X,y,test_size,random_state,cclass,label):    
     
@@ -169,43 +169,45 @@ def regression_grid_search_cvs(X,y,cclass,cv,params,alphas,label,
     print("GS_CVS "+label+", K=" + str(cv) + ", Optimal MSE="+str(abs(gscv.best_score_))+
           ", Optimal Alpha="+str(gscv.best_params_))
 
-# 1- Get X and y from insurance.csv
-np_data, headers = load_data()
 
-# 2a - Use simple label encoder instead of one hot encoder...
-X, y = preprocess_Label_Encoder(np_data)
-
-# 2b - Transform categorical data (some are binary, some are one hot encoded)
-#X, y, headers = preprocess_One_Hot_Encoder(np_data, headers)
-
-# 5 - Init vars for standard linear regression
-test_size = 0.2
-random_state = 0
-alphas = np.linspace(.001,100,100)
-params = {"alpha":alphas,"max_iter":np.array([10000000])}
-
-# Test Polynomials for all methods except Elastic (not enough memory/processor)
-Xd = [X, amf.extended_matrix_deg(X,2,False)]
-for Xr in Xd:
+def exercise7_1():
+    # 1- Get X and y from insurance.csv
+    np_data, headers = load_data()
     
-    # Regression using Train Test Split
-    regression_train_test_split(Xr,y,test_size,random_state,
-                                LinearRegression,"Standard Linear Regression")
+    # 2a - Use simple label encoder instead of one hot encoder...
+    X, y = preprocess_Label_Encoder(np_data)
+    
+    # 2b - Transform categorical data (some are binary, some are one hot encoded)
+    #X, y, headers = preprocess_One_Hot_Encoder(np_data, headers)
+    
+    # 5 - Init vars for standard linear regression
+    test_size = 0.2
+    random_state = 0
+    alphas = np.linspace(.001,100,100)
+    params = {"alpha":alphas,"max_iter":np.array([10000000])}
+    
+    # Test Polynomials for all methods except Elastic (not enough memory/processor)
+    Xd = [X, amf.extended_matrix_deg(X,2,False)]
+    for Xr in Xd:
+        
+        # Regression using Train Test Split
+        regression_train_test_split(Xr,y,test_size,random_state,
+                                    LinearRegression,"Standard Linear Regression")
+        
+        for cv in range(3,6):
+            # Regression using Cross Val Score
+            regression_cvs(Xr, y, LinearRegression,cv,"Standard Linear Regression")
+            
+            # Regression using Grid Search Cross Validation
+            regression_grid_search_cvs(Xr, y,Lasso,cv,params,alphas,"Lasso Regression",)
+            regression_grid_search_cvs(Xr, y,Ridge,cv,params,alphas,"Ridge Regression")
+            
     
     for cv in range(3,6):
-        # Regression using Cross Val Score
-        regression_cvs(Xr, y, LinearRegression,cv,"Standard Linear Regression")
+        # For Elastic Net, add array of l1_ratio values to params
+        params = {"alpha":alphas,"l1_ratio":np.linspace(.1,.99,100),"max_iter":np.array([10000000])}
+        regression_grid_search_cvs(X, y,ElasticNet,cv,params,alphas,"ElasticNet Regression")
         
-        # Regression using Grid Search Cross Validation
-        regression_grid_search_cvs(Xr, y,Lasso,cv,params,alphas,"Lasso Regression",)
-        regression_grid_search_cvs(Xr, y,Ridge,cv,params,alphas,"Ridge Regression")
-        
-
-for cv in range(3,6):
-    # For Elastic Net, add array of l1_ratio values to params
-    params = {"alpha":alphas,"l1_ratio":np.linspace(.1,.99,100)}
-    regression_grid_search_cvs(X, y,ElasticNet,cv,params,alphas,"ElasticNet Regression")
-    
 
 
 

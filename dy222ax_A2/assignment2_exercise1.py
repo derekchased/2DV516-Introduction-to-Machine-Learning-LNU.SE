@@ -11,7 +11,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import assignment2_linear_regression_functions as lirf
 import assignment2_matrix_functions as amf
-import numpy as np
 
 def exercise1_1():
     print ("\nExercise 1 - Normal Equation")
