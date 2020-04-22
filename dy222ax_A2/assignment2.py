@@ -17,8 +17,6 @@ Created on Thu Apr  13 06:36:37 2020
     - The non-mandatory VG-exercise will require a separate report.
 """
 
-import assignment2_exerciseA
-import assignment2_exerciseB
 import assignment2_exercise1
 import assignment2_exercise2
 import assignment2_exercise3
@@ -27,16 +25,6 @@ import assignment2_exercise5
 import assignment2_exercise6
 import assignment2_exercise7
 
-def exerciseA():
-    print ("\n\n<-- Assignment 2, Exercise A -->\n")
-    assignment2_exerciseA.exerciseA_1()
-    assignment2_exerciseA.exerciseA_1_gradient()
-
-def exerciseB():
-    print ("\n\n<-- Assignment 2, Exercise B -->\n")
-    assignment2_exerciseB.exerciseB_1()
-
-    
 def exercise1():
     print ("\n\n<-- Assignment 2, Exercise 1 -->\n")
     assignment2_exercise1.exercise1_1()
@@ -71,8 +59,6 @@ def exercise7():
     print ("\n\n<-- Assignment 2, Exercise 7 -->\n")
     assignment2_exercise7.exercise7_1()    
 
-exerciseA()
-exerciseB()
 exercise1()
 exercise2()
 exercise3()
