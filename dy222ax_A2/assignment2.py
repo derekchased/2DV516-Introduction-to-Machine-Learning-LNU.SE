@@ -57,10 +57,10 @@ def exercise5():
     assignment2_exercise5.exercise5_1()
     
 
-#exerciseA()
-#exercise1()
+exerciseA()
+exercise1()
 exercise2()
-#exerciseB()
-#exercise3()
-#exercise4()
-#exercise5()
+exerciseB()
+exercise3()
+exercise4()
+exercise5()

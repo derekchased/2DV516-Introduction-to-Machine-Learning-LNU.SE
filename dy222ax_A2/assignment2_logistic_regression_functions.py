@@ -33,10 +33,7 @@ def sigmoid(Xe,b):
 # X should be extended or extended and normalized
 # beta should be based on extended matrix
 def cost_function(Xe, beta, y):
-    return np.sum(-1/Xe.shape[0]*
-                  (y.T*np.log(sigmoid(Xe,beta)) + 
-                   np.transpose(1-y)*
-                   np.log(1 - sigmoid(Xe,beta))))
+    return -1/Xe.shape[0]*(y.T@np.log(sigmoid(Xe,beta)) + np.transpose(1-y)@ np.log(1 - sigmoid(Xe,beta)))
 
 
 # return the beta value
