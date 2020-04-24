@@ -140,7 +140,7 @@ def regression_train_test_split(X,y,test_size,random_state,cclass,label):
     mse = metrics.mean_squared_error(y_test, y_pred)
     
     # Print out
-    print("TTS "+label+", MSE="+str(mse))
+    print("TTS,"+label+str(mse))
 
 # Regrssion using cross_val_score
 def regression_cvs(X,y,cclass,cv,label,scoring="neg_root_mean_squared_error"):    
@@ -154,7 +154,7 @@ def regression_cvs(X,y,cclass,cv,label,scoring="neg_root_mean_squared_error"):
     # Get the average MSE 
     mean_mse = np.mean(MSE)
     
-    print("CVS "+label+", K=" + str(cv) + ", MSE="+str(mean_mse))
+    print("CVS,"+label+str(mean_mse))
 
 # Regrssion using GridSearchCV
 def regression_grid_search_cvs(X,y,cclass,cv,params,alphas,label,
@@ -166,8 +166,8 @@ def regression_grid_search_cvs(X,y,cclass,cv,params,alphas,label,
     
     gscv.fit(X,y)
     
-    print("GS_CVS "+label+", K=" + str(cv) + ", Optimal MSE="+str(abs(gscv.best_score_))+
-          ", Optimal Alpha="+str(gscv.best_params_))
+    print("GS_CVS,"+label+str(abs(gscv.best_score_))+
+          ","+str(gscv.best_params_))
 
 
 def exercise7_1():
@@ -184,33 +184,28 @@ def exercise7_1():
     # 5 - Init vars for standard linear regression
     test_size = 0.2
     random_state = 0
-    alphas = np.linspace(.001,100,100)
-    degree = 4
+    alphas = np.linspace(.001,50,50)
+    cv = 5
     # Test Polynomials for all methods except Elastic (not enough memory/processor)
-    Xd = [X, amf.extended_matrix_deg(X,degree,False)]
     
-    for deg,Xr in enumerate(Xd):
+    print("method,algorithm,degree,score,params")
+    for deg in range(1,6):
+        Xr = amf.extended_matrix_deg(X,deg,False)
         
         # Regression using Train Test Split
         regression_train_test_split(Xr,y,test_size,random_state,
-                                    LinearRegression,"Standard Linear Regression")
+                                    LinearRegression,"Linear Regression,"+str(deg)+",")
+        params = {"alpha":alphas,"max_iter":np.array([10000000])}
         
-        for cv in range(3,7):
-            
-            params = {"alpha":alphas,"max_iter":np.array([10000000])}
-            
-            # Regression using Cross Val Score
-            regression_cvs(Xr, y, LinearRegression,cv,"Standard Linear Regression (deg "+str(deg+1))
-            
-            # Regression using Grid Search Cross Validation
-            regression_grid_search_cvs(Xr, y,Lasso,cv,params,alphas,"Lasso Regression (deg "+str(deg+1),)
-            regression_grid_search_cvs(Xr, y,Ridge,cv,params,alphas,"Ridge Regression (deg "+str(deg+1) )
-            
-    
-            # For Elastic Net, add array of l1_ratio values to params
-            params = {"alpha":alphas,"l1_ratio":np.linspace(.1,.99,100),"max_iter":np.array([10000000])}
-            regression_grid_search_cvs(X, y,ElasticNet,cv,params,alphas,"ElasticNet Regression (deg "+str(deg+1))
+        # Regression using Cross Val Score
+        regression_cvs(Xr, y, LinearRegression,cv,"Linear Regression,"+str(deg)+",")
+        
+        # Regression using Grid Search Cross Validation
+        regression_grid_search_cvs(Xr, y,Lasso,cv,params,alphas,"Lasso Regression,"+str(deg)+",")
+        regression_grid_search_cvs(Xr, y,Ridge,cv,params,alphas,"Ridge Regression,"+str(deg)+",")
         
 
-
-
+        # For Elastic Net, add array of l1_ratio values to params
+        params = {"alpha":alphas,"l1_ratio":np.linspace(.1,.99,50),"max_iter":np.array([10000000])}
+        regression_grid_search_cvs(X, y,ElasticNet,cv,params,alphas,"ElasticNet Regression,"+str(deg)+",")
+   

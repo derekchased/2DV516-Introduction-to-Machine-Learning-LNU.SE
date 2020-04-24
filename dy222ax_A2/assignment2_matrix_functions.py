@@ -30,7 +30,7 @@ def mapFeature(X1,X2,deg,ones=True): # Pyton
         one = np.ones([len(X1),1])
         Xe = np.c_[one,X1,X2] # Start with [1,X1,X2]
     else:
-        Xe = np.c_[X1,X2] # Start with [1,X1,X2]
+        Xe = np.c_[X1,X2] # Start with [X1,X2]
     for i in range(2,deg+1):
         for j in range(0,i+1):
             Xnew = X1**(i-j)*X2**j # type (N)
