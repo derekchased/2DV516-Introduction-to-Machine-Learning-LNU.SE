@@ -25,7 +25,7 @@ def extended_matrix_deg(X,deg=1, ones=True):
 
 # extend for 2 features, any degree more than 1
 def mapFeature(X1,X2,deg,ones=True): # Pyton
-    assert deg > 1 # if degree is less than 1, throw an error
+    #assert deg > 1 # if degree is less than 1, throw an error
     if ones:
         one = np.ones([len(X1),1])
         Xe = np.c_[one,X1,X2] # Start with [1,X1,X2]

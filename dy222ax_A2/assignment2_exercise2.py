@@ -110,8 +110,7 @@ def exercise2_1():
           str(round(pred_2022_index))," and the corresponding price is",
           str(round(pred_2022_price_in_millions,4)),"million sek")
     
-    print("\nI do believe the answer is somewhat realistic, in the USA we would",
-          "say 'it's in the ballpark'. However, the data has many inflection",
+    print("\nI do believe the answer is somewhat realistic. However, the data has many inflection",
           "points and there is no way to tell exactly where the actual price will",
           "be in 2022- we don't know which way the data will inflect.")
     

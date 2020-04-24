@@ -176,6 +176,7 @@ def exercise7_1():
     
     # 2a - Use simple label encoder instead of one hot encoder...
     X, y = preprocess_Label_Encoder(np_data)
+    X = amf.feature_normalization(X)
     
     # 2b - Transform categorical data (some are binary, some are one hot encoded)
     #X, y, headers = preprocess_One_Hot_Encoder(np_data, headers)
@@ -184,29 +185,31 @@ def exercise7_1():
     test_size = 0.2
     random_state = 0
     alphas = np.linspace(.001,100,100)
-    params = {"alpha":alphas,"max_iter":np.array([10000000])}
-    
+    degree = 4
     # Test Polynomials for all methods except Elastic (not enough memory/processor)
-    Xd = [X, amf.extended_matrix_deg(X,2,False)]
-    for Xr in Xd:
+    Xd = [X, amf.extended_matrix_deg(X,degree,False)]
+    
+    for deg,Xr in enumerate(Xd):
         
         # Regression using Train Test Split
         regression_train_test_split(Xr,y,test_size,random_state,
                                     LinearRegression,"Standard Linear Regression")
         
-        for cv in range(3,6):
+        for cv in range(3,7):
+            
+            params = {"alpha":alphas,"max_iter":np.array([10000000])}
+            
             # Regression using Cross Val Score
-            regression_cvs(Xr, y, LinearRegression,cv,"Standard Linear Regression")
+            regression_cvs(Xr, y, LinearRegression,cv,"Standard Linear Regression (deg "+str(deg+1))
             
             # Regression using Grid Search Cross Validation
-            regression_grid_search_cvs(Xr, y,Lasso,cv,params,alphas,"Lasso Regression",)
-            regression_grid_search_cvs(Xr, y,Ridge,cv,params,alphas,"Ridge Regression")
+            regression_grid_search_cvs(Xr, y,Lasso,cv,params,alphas,"Lasso Regression (deg "+str(deg+1),)
+            regression_grid_search_cvs(Xr, y,Ridge,cv,params,alphas,"Ridge Regression (deg "+str(deg+1) )
             
     
-    for cv in range(3,6):
-        # For Elastic Net, add array of l1_ratio values to params
-        params = {"alpha":alphas,"l1_ratio":np.linspace(.1,.99,100),"max_iter":np.array([10000000])}
-        regression_grid_search_cvs(X, y,ElasticNet,cv,params,alphas,"ElasticNet Regression")
+            # For Elastic Net, add array of l1_ratio values to params
+            params = {"alpha":alphas,"l1_ratio":np.linspace(.1,.99,100),"max_iter":np.array([10000000])}
+            regression_grid_search_cvs(X, y,ElasticNet,cv,params,alphas,"ElasticNet Regression (deg "+str(deg+1))
         
 
 
