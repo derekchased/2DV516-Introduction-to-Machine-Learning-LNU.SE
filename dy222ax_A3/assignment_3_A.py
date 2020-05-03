@@ -9,6 +9,7 @@ from sklearn.svm import SVC
 import numpy as np
 import plt_functions as pltf
 import matplotlib.pyplot as plt
+import assignment_3_funcs as as3f
 
 def load_data():
     data = np.loadtxt('./data/bm.csv',delimiter=',')
@@ -17,26 +18,9 @@ def load_data():
     return X, y
 
 
-def randomize_data(X, y):
-    # Create generator object with seed (for consistent testing across compilation)
-    #gnrtr = np.random.default_rng(7)
-    np.random.seed(7)
-
-    # Create random array with values permuted from the num elements of y
-    #r = gnrtr.permutation(len(y))
-    r = np.random.permutation(len(y))
-
-    # Reorganize X and y based on the random permutation, all columns
-    X, y = X[r, :], y[r]
-
-    # Assign the first 5000 rows from X
-    X_s, y_s = X[:5000, :], y[:5000]
-
-    return X, y, X_s, y_s
-
 def exercise_1():
     
-    X, y, X_s, y_s = randomize_data(*load_data())
+    X, y, X_s, y_s = as3f.randomize_data(*load_data(),num_train=5000)
     
     # Ex A.2
     # rbf = gaussian,

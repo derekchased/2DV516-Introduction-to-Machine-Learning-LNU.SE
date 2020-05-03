@@ -29,7 +29,7 @@ def add_countour(ax, xx,yy,IPredictable,**params):
     Z = Z.reshape(xx.shape)
     
     # Show the boundary
-    ax.contour(xx, yy, Z, s=1, **params)
+    ax.contour(xx, yy, Z, **params)
     
     return ax, Z
 

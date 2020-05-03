@@ -19,7 +19,7 @@ Created on Thu Apr  13 06:36:37 2020
 
 import assignment_3_A
 import assignment_3_1
-#import assignment_3_2
+import assignment_3_2
 
 
 def ex_3_A():
@@ -30,11 +30,11 @@ def ex_3_1():
     print ("\n\n<-- Assignment 3, Exercise 1 -->\n")
     print ("- see report")
     print ("- run this manually. Computation time is potentially long.")
-    #assignment_3_1.exercise_1()
+    assignment_3_1.exercise_1()
 
 def ex_3_2():
-    print ("\n\n<-- Assignment 2, Exercise 1 -->\n")
-    assignment_3_2.exercise_1()
+    print ("\n\n<-- Assignment 3, Exercise 2 -->\n")
+    #assignment_3_2.exercise_1()
 """
 def exercise2():
     print ("\n\n<-- Assignment 2, Exercise 2 -->\n")
