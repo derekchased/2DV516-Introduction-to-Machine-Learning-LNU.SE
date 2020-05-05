@@ -42,9 +42,9 @@ def feature_normalization(X):
     # compute mean and stdev over axis 0, the feature vector (down the column)
     print("feature_normalization")
     mean = np.mean(X,0)
-    print("mean",mean)
+    #print("mean",mean)
     stddev = np.std(X,0)
-    print("stddev",stddev)
+    #print("stddev",stddev)
     # elementwise difference
     diff = np.subtract(X,mean)
     
