@@ -23,9 +23,27 @@ def load_data():
     return X_train, y_train, X_test, y_test
 
 
+def print_MSE(clf,X_train,y_train,X_test,y_test):
+    # Fit and then predict train
+    clf.fit(X_train,y_train)
+    preds = clf.predict(X_train)
+
+    # Calc train MSE
+    diff = preds - y_train
+    diffsq = diff**2
+    mse = np.sum(diffsq)/len(preds)
+    print("Train MSE",mse)
+
+    # Calc test MSE
+    preds = clf.predict(X_test)
+    diff = preds - y_test
+    diffsq = diff**2
+    mse = np.sum(diffsq)/len(preds)
+    print("Test MSE",mse)
+    
 # Ex 1
-def ex_1():
-    print("\nA3, Ex2.1")
+def ex_3_1():
+    print("\nA3, Ex3.1")
     
     # Load Data
     X_train, y_train, X_test, y_test = load_data()
@@ -34,86 +52,86 @@ def ex_1():
     random_state = 42
     #n_jobs = -1 # use parallel processing, auto choose num cores
     
+    # Build a baseline DecisionTreeRegressor for comparison
+    print("\nDecisionTreeRegressor default")
+    print_MSE(DecisionTreeRegressor(random_state = random_state).fit(X_train,y_train), X_train, y_train, X_test, y_test)
+    
     # Params for Grid Search
-    dtrparams = {"max_depth":[1,2,3,4,5,6,7,8,9,10,11,12,13,14],
-                 "min_samples_split":[2,3,4,5,6,7,8,9,10,11,12,13,14],
-                 "min_samples_leaf":[1,2,3,4,5,6,7,8,9,10,11,12,13,14],
-                 "max_features":["auto","sqrt","log2"],
-                 "random_state":[random_state]}
-    
-    
+    dtrparams = {"max_depth":[1,2,3,4,5,6,7,8,9],"random_state":[random_state]}
+                 
+    # Cross validate and finetune hyperparameters
     gscv = as3f.grid_search_SVC(X_train, y_train, 
-                                DecisionTreeRegressor, 5, dtrparams)
+                                DecisionTreeRegressor, 5, dtrparams,print_score=False)
+    print("\nDecisionTreeRegressor tuned",gscv.best_params_)
     
+    # Get regressor from GridsearchCV
+    clf = gscv.best_estimator_
     
-    # Create Regressor and train
-    clf = DecisionTreeRegressor(random_state = random_state)
-    print("\n\nDecisionTreeRegressor")
-    
-    # Fit and then predict train
-    clf.fit(X_train,y_train)
-    preds = clf.predict(X_train)
-    
-    # Calc train MSE
-    diff = preds - y_train
-    diffsq = diff**2
-    mse = np.sum(diffsq)/len(preds)
-    print("Train MSE",mse)
-    print("num correct",np.sum(preds==y_train))
-    print("num incorrect",np.sum(preds != y_train))
-    print("accuracy",np.sum(preds == y_train)/len(y_train))
-    
-    
-    # Predict test and calc test MSE
-    preds = clf.predict(X_test)
-    diff = preds - y_test
-    diffsq = diff**2
-    mse = np.sum(diffsq)/len(preds)
-    print("\nTest MSE",mse)
-    print("num correct",np.sum(preds==y_test))
-    print("num incorrect",np.sum(preds != y_test))
-    print("accuracy",np.sum(preds == y_test)/len(y_test))
+    # Calc MSE
+    print_MSE(clf,X_train,y_train,X_test,y_test)
 
 
 # Ex 2
-def ex_2():
-    print("\nA3, Ex2.2")
+def ex_3_2():
+    print("\nA3, Ex3.2")
     
     # Load Data
     X_train, y_train, X_test, y_test = load_data()
     
     # Set Random State
     random_state = 42
-    n_jobs = -1 # use parallel processing, auto choose num cores
+    #n_jobs = -1 # use parallel processing, auto choose num cores
     
-    # Create Regressor and train
-    clf = RandomForestRegressor(random_state = random_state,n_jobs=n_jobs)
-    print("\nRandomForestRegressor")
+    # Build a baseline DecisionTreeRegressor for comparison
+    print("\nRandomForestRegressor default")
+    print_MSE(RandomForestRegressor(random_state = random_state,n_jobs=-1).fit(X_train,y_train), X_train, y_train, X_test, y_test)
     
-    clf.fit(X_train,y_train)
-    preds = clf.predict(X_train)
+    # Params for Grid Search
+    dtrparams = {"max_depth":[1,2,3,4,5,6,7,8,9],"random_state":[random_state],"n_jobs":[-1]}
+                 
+    # Cross validate and finetune hyperparameters
+    gscv = as3f.grid_search_SVC(X_train, y_train, 
+                                RandomForestRegressor, 5, dtrparams,print_score=False)
+    print("\nRandomForestRegressor tuned",gscv.best_params_)
     
-    diff = preds - y_train
-    diffsq = diff**2
-    mse = np.sum(diffsq)/len(preds)
-    print("Train MSE",mse)
-    print("num correct",np.sum(preds==y_train))
-    print("num incorrect",np.sum(preds != y_train))
-    print("accuracy",np.sum(preds == y_train)/len(y_train))
+    # Get regressor from GridsearchCV
+    clf = gscv.best_estimator_
     
-    
-    preds = clf.predict(X_test)
-    diff = preds - y_test
-    diffsq = diff**2
-    mse = np.sum(diffsq)/len(preds)
-    print("Test MSE",mse)
-    print("num correct",np.sum(preds==y_test))
-    print("num incorrect",np.sum(preds != y_test))
-    print("accuracy",np.sum(preds == y_test)/len(y_test))
+    # Calc MSE
+    print_MSE(clf,X_train,y_train,X_test,y_test)
 
+# Ex 2
+def ex_3_3():
+    print("\nA3, Ex3.3")
+    
+    # Load Data
+    X_train, y_train, X_test, y_test = load_data()
+    
+    # Set Random State
+    random_state = 42
+    #n_jobs = -1 # use parallel processing, auto choose num cores
+    
+    # Build a baseline DecisionTreeRegressor for comparison
+    print("\nRandomForestRegressor default")
+    print_MSE(RandomForestRegressor(random_state = random_state,
+                                    n_jobs=-1).fit(X_train,y_train), 
+              X_train, y_train, X_test, y_test)
+    
+    # Params for Grid Search
+    dtrparams = {"max_depth":[1,2,3,4,5,6,7,8,9],"random_state":[random_state],"n_jobs":[-1]}
+                 
+    # Cross validate and finetune hyperparameters
+    gscv = as3f.grid_search_SVC(X_train, y_train, 
+                                RandomForestRegressor, 5, dtrparams,print_score=False)
+    print("\nRandomForestRegressor tuned",gscv.best_params_)
+    
+    # Get regressor from GridsearchCV
+    clf = gscv.best_estimator_
+    
+    # Calc MSE
+    print_MSE(clf,X_train,y_train,X_test,y_test)
 
-#ex_1()
-#ex_2()
-
-
+#ex_3_1()
+#ex_3_2()
+ex_3_3()
 

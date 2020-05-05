@@ -11,7 +11,8 @@ import numpy as np
 
 # Regrssion using GridSearchCV
 def grid_search_SVC(X, y, cclass, cv, params,refit=True,print_score=True):   
-    print("grid_search_SVC",params)
+    if print_score:
+        print("grid_search_SVC",params)
     gscv = GridSearchCV(cclass(), params, cv = cv, refit=refit,n_jobs=-1)
     gscv.fit(X,y)
     if print_score:
