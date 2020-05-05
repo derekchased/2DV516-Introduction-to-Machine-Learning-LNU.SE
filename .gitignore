@@ -2,3 +2,4 @@ __pycache__/
 *.zip
 .idea
 dy222ax_A3/data/
+*.ipynb_checkpoints
