@@ -12,14 +12,14 @@ import numpy as np
 # Regrssion using GridSearchCV
 def grid_search_SVC(X, y, cclass, cv, params,refit=True,print_score=True):   
     print("grid_search_SVC",params)
-    gscv = GridSearchCV(cclass(), params, cv = cv, refit=refit)
+    gscv = GridSearchCV(cclass(), params, cv = cv, refit=refit,n_jobs=-1)
     gscv.fit(X,y)
     if print_score:
         print(str(abs(gscv.best_score_))+","+str(gscv.best_params_))
     return (gscv)
 
 def randomize_data(X, y, seed=7, num_train=637):
-    print("randomize_data")
+    print("randomize_data",num_train)
     # Create generator object with seed (for consistent testing across compilation)
     #gnrtr = np.random.default_rng(7)
     np.random.seed(seed)
