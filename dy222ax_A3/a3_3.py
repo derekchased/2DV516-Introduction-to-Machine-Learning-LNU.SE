@@ -112,7 +112,7 @@ def ex_2():
     print("accuracy",np.sum(preds == y_test)/len(y_test))
 
 
-ex_1()
+#ex_1()
 #ex_2()
 
 
