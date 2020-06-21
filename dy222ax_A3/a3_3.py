@@ -107,29 +107,7 @@ def ex_3_3():
     # Load Data
     X_train, y_train, X_test, y_test = load_data()
     
-    # Set Random State
-    random_state = 42
-    #n_jobs = -1 # use parallel processing, auto choose num cores
     
-    # Build a baseline DecisionTreeRegressor for comparison
-    print("\nRandomForestRegressor default")
-    print_MSE(RandomForestRegressor(random_state = random_state,
-                                    n_jobs=-1).fit(X_train,y_train), 
-              X_train, y_train, X_test, y_test)
-    
-    # Params for Grid Search
-    dtrparams = {"max_depth":[1,2,3,4,5,6,7,8,9],"random_state":[random_state],"n_jobs":[-1]}
-                 
-    # Cross validate and finetune hyperparameters
-    gscv = as3f.grid_search_SVC(X_train, y_train, 
-                                RandomForestRegressor, 5, dtrparams,print_score=False)
-    print("\nRandomForestRegressor tuned",gscv.best_params_)
-    
-    # Get regressor from GridsearchCV
-    clf = gscv.best_estimator_
-    
-    # Calc MSE
-    print_MSE(clf,X_train,y_train,X_test,y_test)
 
 #ex_3_1()
 #ex_3_2()

@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Jun 12 12:52:44 2020
+
+@author: derek
+"""
+
+positive semi benefit
+... exponential of kernel is a kernel
+exp inside is a kernel
+sum of kernels is still a kernel
+power of a kernel is a kernel

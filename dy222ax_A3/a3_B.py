@@ -47,3 +47,6 @@ def ex1():
         pltf.add_countourf(ax, xx, yy, clf, colors='r',linewidths=0.5)
         ax.scatter(X[:,0], X[:,1], s=.5,c=y)
         plt.show()
+
+
+ex1()
