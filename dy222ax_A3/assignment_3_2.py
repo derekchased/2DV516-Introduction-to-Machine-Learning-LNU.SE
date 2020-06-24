@@ -14,7 +14,7 @@ def ex_1(num_train = 12000,C=[.1,10,1000],gamma=[.1,10,1000]):
     print("A3, Ex2")
     X, y = load_data()
     X = as3f.normalize_mnist_data(X)
-    X, y, X_s, y_s = as3f.randomize_data(X, y, num_train=num_train)
+    X, y, X_s, y_s = as3f.randomize_and_split_data(X, y, num_train=num_train)
     svc_param = [{'kernel':['rbf'], 'C':C,'gamma':gamma}]
 
     gscv = as3f.grid_search_SVC(X_s, y_s, SVC, 5, svc_param)

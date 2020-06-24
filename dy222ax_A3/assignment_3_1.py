@@ -24,7 +24,7 @@ def exercise_1():
     print("exercise1")
     X, y = load_data()
     X = as3f.normalize_mnist_data(X)
-    X, y, X_s, y_s = as3f.randomize_data(X, y)
+    X, y, X_s, y_s = as3f.randomize_and_split_data(X, y)
     test_params = [.1,1,10,100,1000,10000]
     svc_params = [{'kernel':['linear'],'C':test_params},
                   {'kernel':['rbf'], 'C':test_params,'gamma':test_params},

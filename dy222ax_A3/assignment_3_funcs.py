@@ -19,8 +19,8 @@ def grid_search_SVC(X, y, cclass, cv, params,refit=True,print_score=True):
         print(str(abs(gscv.best_score_))+","+str(gscv.best_params_))
     return (gscv)
 
-def randomize_data(X, y, seed=7, num_train=637):
-    print("randomize_data",num_train)
+def randomize_and_split_data(X, y, seed=7, num_train=637):
+    print("randomize_and_split_data")
     # Create generator object with seed (for consistent testing across compilation)
     #gnrtr = np.random.default_rng(7)
     np.random.seed(seed)
@@ -36,6 +36,20 @@ def randomize_data(X, y, seed=7, num_train=637):
     X_s, y_s = X[:num_train, :], y[:num_train]
 
     return X, y, X_s, y_s
+
+
+def randomize_data(X, y, seed=7):
+    print("randomize_data")
+    # Create generator object with seed (for consistent testing across compilation)
+    #gnrtr = np.random.default_rng(7)
+    np.random.seed(seed)
+
+    # Create random array with values permuted from the num elements of y
+    #r = gnrtr.permutation(len(y))
+    r = np.random.permutation(len(y))
+
+    # Reorganize X and y based on the random permutation, all columns
+    return X[r, :], y[r]
 
 def normalize_mnist_data(X):
     print("normalize mnist data")

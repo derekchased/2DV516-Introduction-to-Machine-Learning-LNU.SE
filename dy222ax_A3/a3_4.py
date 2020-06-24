@@ -39,17 +39,20 @@ error against true
 
 
 import numpy as np
+import plt_functions
+import assignment_3_funcs as as3f
+import matplotlib.pyplot as plt
+from sklearn.neural_network import MLPClassifier
 
 def load_data():
-    train_data = np.loadtxt('./data/fashion-mnist_train.csv',delimiter=',',skiprows=1)
+    train_data = np.loadtxt('data/fashion-mnist_train.csv',delimiter=',',skiprows=1)
     X_train = train_data[:, 1:]
     y_train = train_data[:, 0]
     
-    test_data = np.loadtxt('./data/fashion-mnist_test.csv',delimiter=',',skiprows=1)
+    test_data = np.loadtxt('data/fashion-mnist_test.csv',delimiter=',',skiprows=1)
     X_test = test_data[:, 1:]
     y_test = test_data[:, 0]
-    
-    
+
     return X_train, y_train, X_test, y_test
 
 
@@ -72,11 +75,21 @@ def load_data():
     print("Test MSE",mse)"""
     
 # Ex 1
-def ex_4_1():
-    print("\nA3, Ex3.1")
+def ex_4_1(X_train, y_train, X_test, y_test):
+    print("\nA3, Ex4.1")
+    X_train_rand, y_train_rand = as3f.randomize_data(X_train, y_train)
+    axes = plt_functions.iterate_subplots(1, (8,8), 4, 4)
+    for i in range(len(axes)):
+        axes[i].imshow(X_train_rand[i].reshape(28,28))
+    plt.show()
 
 
-print("hello!")
+#
+
+#ex_4_1()
+
+#MLPClassifier
+
 
 
 """

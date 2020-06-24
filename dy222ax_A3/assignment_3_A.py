@@ -20,7 +20,7 @@ def load_data():
 
 def exercise_1():
     
-    X, y, X_s, y_s = as3f.randomize_data(*load_data(),num_train=5000)
+    X, y, X_s, y_s = as3f.randomize_and_split_data(*load_data(),num_train=5000)
     
     # Ex A.2
     # rbf = gaussian,
