@@ -90,6 +90,11 @@ def ex_4_1(X_train, y_train, X_test, y_test):
 
 #MLPClassifier
 
+X_train, y_train, X_test, y_test = load_data();
+clf = MLPClassifier(early_stopping=True,hidden_layer_sizes=(1000,),alpha=.01)
+clf.fit(X_train,y_train)
+print(clf.score(X_test,y_test))
+
 
 
 """
