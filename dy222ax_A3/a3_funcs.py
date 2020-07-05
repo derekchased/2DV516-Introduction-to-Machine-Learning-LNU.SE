@@ -21,43 +21,16 @@ def grid_search_SVC(X, y, cclass, cv, params,refit=True,print_score=True):
 
 def randomize_and_split_data(X, y, seed=7, num_train=637):
     print("randomize_and_split_data")
-    # Create generator object with seed (for consistent testing across compilation)
-    #gnrtr = np.random.default_rng(7)
-    np.random.seed(seed)
-
-    # Create random array with values permuted from the num elements of y
-    #r = gnrtr.permutation(len(y))
-    r = np.random.permutation(len(y))
-
-    # Reorganize X and y based on the random permutation, all columns
-    X, y = X[r, :], y[r]
+    X, y = randomize_data(X, y)
     
-    # Assign the first 5000 rows from X
-    X_s, y_s = X[:num_train, :], y[:num_train]
-
-    return X, y, X_s, y_s
-
-def randomize_and_split_data2(X, y, seed=7, num_train=637):
-    print("randomize_and_split_data")
-    # Create generator object with seed (for consistent testing across compilation)
-    #gnrtr = np.random.default_rng(7)
-    np.random.seed(seed)
-
-    # Create random array with values permuted from the num elements of y
-    #r = gnrtr.permutation(len(y))
-    r = np.random.permutation(len(y))
-
-    # Reorganize X and y based on the random permutation, all columns
-    X, y = X[r, :], y[r]
-    
-    # Assign the first num_train rows from X
+    # Assign the first num_train rows to train
     X_train, y_train = X[:num_train, :], y[:num_train]
-
-    # Assign the remaining rows from X
+    
+    # Assign the remaining rows to test
     X_test, y_test = X[num_train:, :], y[num_train:]
 
-    return X_train, y_train, X_test, y_test
-
+    # Return the reorganized data- complete, train and test
+    return X, y, X_train, y_train, X_test, y_test
 
 def randomize_data(X, y, seed=7):
     print("randomize_data")
@@ -79,6 +52,7 @@ def normalize_mnist_data(X):
     range_val = max_val - min_val
     return np.divide(X,range_val)
 
+"""
 def print_gscv(gscv):
     bc = gscv.cv_results_
     be = gscv.best_estimator_
@@ -89,3 +63,4 @@ def print_gscv(gscv):
     bn = gscv.n_splits_
     br = gscv.refit_time_
     print(bc,be,bs,bp,bi,bss,bn,br)
+"""
