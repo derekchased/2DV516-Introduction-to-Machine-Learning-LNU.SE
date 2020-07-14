@@ -1,15 +1,7 @@
 import numpy as np
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
-import assignment_3_funcs as as3f
-
-"""
-from sklearn.model_selection import cross_val_score
-import assignment_3_funcs as as3f
-import matplotlib.pyplot as plt
-import plt_functions as pltf
-import assignment2_matrix_functions as a2mf
-"""
+import a3_funcs as as3f
 
 def load_data():
     train_data = np.loadtxt('./data/fbtrain.csv',delimiter=',')
@@ -24,11 +16,8 @@ def load_data():
 
 
 def print_MSE(clf,X_train,y_train,X_test,y_test):
-    # Fit and then predict train
-    clf.fit(X_train,y_train)
-    preds = clf.predict(X_train)
-
     # Calc train MSE
+    preds = clf.predict(X_train)
     diff = preds - y_train
     diffsq = diff**2
     mse = np.sum(diffsq)/len(preds)
@@ -53,8 +42,10 @@ def ex_3_1():
     #n_jobs = -1 # use parallel processing, auto choose num cores
     
     # Build a baseline DecisionTreeRegressor for comparison
-    print("\nDecisionTreeRegressor default")
-    print_MSE(DecisionTreeRegressor(random_state = random_state).fit(X_train,y_train), X_train, y_train, X_test, y_test)
+    
+    base_tree = DecisionTreeRegressor(random_state = random_state).fit(X_train, y_train)
+    print("\nDecisionTreeRegressor no max depth set, Depth",base_tree.get_depth())
+    print_MSE(base_tree, X_train, y_train, X_test, y_test)
     
     # Params for Grid Search
     dtrparams = {"max_depth":[1,2,3,4,5,6,7,8,9],"random_state":[random_state]}
@@ -62,14 +53,17 @@ def ex_3_1():
     # Cross validate and finetune hyperparameters
     gscv = as3f.grid_search_SVC(X_train, y_train, 
                                 DecisionTreeRegressor, 5, dtrparams,print_score=False)
-    print("\nDecisionTreeRegressor tuned",gscv.best_params_)
-    
+
     # Get regressor from GridsearchCV
     clf = gscv.best_estimator_
     
+    print("\nDecisionTreeRegressor Max Depth tuned, Depth", clf.get_depth())
+    
     # Calc MSE
     print_MSE(clf,X_train,y_train,X_test,y_test)
-
+    
+    print("\nCan this be improved by not allowing the tree to grow too deep in the training process?")
+    print("-> Yes, using gridsearchcv, we found that a max depth of 5 produced a better MSE result than not having a max depth. Without a max depth, we see the model created a depth of 42 with a worse MSE.")
 
 # Ex 2
 def ex_3_2():
@@ -84,7 +78,8 @@ def ex_3_2():
     
     # Build a baseline DecisionTreeRegressor for comparison
     print("\nRandomForestRegressor default")
-    print_MSE(RandomForestRegressor(random_state = random_state,n_jobs=-1).fit(X_train,y_train), X_train, y_train, X_test, y_test)
+    base_tree = RandomForestRegressor(random_state = random_state,n_jobs=-1).fit(X_train,y_train)
+    print_MSE(base_tree, X_train, y_train, X_test, y_test)
     
     # Params for Grid Search
     dtrparams = {"max_depth":[1,2,3,4,5,6,7,8,9],"random_state":[random_state],"n_jobs":[-1]}
@@ -92,7 +87,7 @@ def ex_3_2():
     # Cross validate and finetune hyperparameters
     gscv = as3f.grid_search_SVC(X_train, y_train, 
                                 RandomForestRegressor, 5, dtrparams,print_score=False)
-    print("\nRandomForestRegressor tuned",gscv.best_params_)
+    print("\nRandomForestRegressor tuned")
     
     # Get regressor from GridsearchCV
     clf = gscv.best_estimator_
@@ -110,6 +105,6 @@ def ex_3_3():
     
 
 #ex_3_1()
-#ex_3_2()
-ex_3_3()
+ex_3_2()
+#ex_3_3()
 

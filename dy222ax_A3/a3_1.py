@@ -14,7 +14,6 @@ import matplotlib.pyplot as plt
 
 
 def load_data():
-    print("A3 load_data")
     data = np.loadtxt('./data/mnistsub.csv',delimiter=',')
     X = data[:, 0:-1]
     y = data[:, -1]
@@ -25,16 +24,21 @@ def exercise_1():
     X, y = load_data()
     X = as3f.normalize_mnist_data(X)
     X, y, X_train, y_train, X_test, y_test = as3f.randomize_and_split_data(X, y)
+    
+    # Hypertuning values of C and gamma
     test_params = [.1,1,10,100,1000]
+    
+    # Setup each model
     svc_params = [{'kernel':['linear'],'C':test_params},
                   {'kernel':['rbf'], 'C':test_params,'gamma':test_params},
                   {'kernel':['poly'], 'C':test_params,'degree':[2,3,4,5,6]}]
     
+    # Loop through each model
     for svc_param in svc_params:
         # CV and Regression using Grid Search Cross Validation
         gscv = as3f.grid_search_SVC(X_train, y_train, SVC, 5, svc_param)
         
-        # Analysis
+        # Analysis and plot of each model
         exercise_1_2(gscv, X_train, y_train, X_test, y_test )
     
     
@@ -65,15 +69,8 @@ def exercise_1_2(gscv, X_train, y_train, X_test, y_test):
     pltf.add_countour(ax, xx, yy, clf, colors='r',linewidths=0.2)
     ax.scatter(X_train[:,0], X_train[:,1], s=.5,c=y_train)
     plt.show()
-    plt.savefig("./report/ex1_"+kernel+"_train.png"  )
-    
-    # plot boundary and data points
-    # Separate vectors
-    #X1 = X_test[clf.support_, 0]
-    #X2 = X_test[clf.support_, 1]
-    
-    # Meshgrid
-    #xx, yy = pltf.get_meshgrid(X1, X2)
+    #plt.savefig("./report/ex1_"+kernel+"_train.png"  )
+    plt.show()
     
     accuracy = str(round(abs(clf.score(X_test, y_test)),5))
     kernel = str(gscv.best_params_["kernel"])
@@ -84,7 +81,7 @@ def exercise_1_2(gscv, X_train, y_train, X_test, y_test):
     ax = fig.add_subplot(1, 1, 1)
     pltf.add_countour(ax, xx, yy, clf, colors='r',linewidths=0.2)
     ax.scatter(X_test[:,0], X_test[:,1], s=.5,c=y_test)
-    plt.savefig("./report/ex1_"+kernel+"_test.png"  )
+    #plt.savefig("./report/ex1_"+kernel+"_test.png"  )
+    plt.show()
     
 exercise_1()
-    

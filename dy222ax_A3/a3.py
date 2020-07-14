@@ -24,9 +24,14 @@ import a3_1_1vg
 
 def ex_3_1():
     print ("\n\n<-- Assignment 3, Exercise 1 -->\n")
-    print ("- see report")
-    print ("- run this manually. Computation time is potentially long.")
+    print ("- Plots are provided in ex1_report.pdf")
     a3_1.exercise_1()
+
+def ex_3_1vg():
+    print ("\n\n<-- Assignment 3, Exercise 1.1 VG  -->\n")
+    print ("- Plots are provided in ex1_report.pdf")
+    a3_1_1vg.exercise_1_1vg()
+
 
 def ex_3_2():
     print ("\n\n<-- Assignment 3, Exercise 2 -->\n")
@@ -63,9 +68,9 @@ def exercise7():
     print ("\n\n<-- Assignment 2, Exercise 7 -->\n")
     assignment2_exercise7.exercise7_1()    """
 
-ex_3_A()
 ex_3_1()
-ex_3_2()
+ex_3_1vg()
+
 """exercise3()
 exercise4()
 exercise5()

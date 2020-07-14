@@ -20,8 +20,7 @@ def grid_search_SVC(X, y, cclass, cv, params,refit=True,print_score=True):
     return (gscv)
 
 def randomize_and_split_data(X, y, seed=7, num_train=637):
-    print("randomize_and_split_data")
-    X, y = randomize_data(X, y)
+    X, y = randomize_data(X, y, seed)
     
     # Assign the first num_train rows to train
     X_train, y_train = X[:num_train, :], y[:num_train]
@@ -33,7 +32,6 @@ def randomize_and_split_data(X, y, seed=7, num_train=637):
     return X, y, X_train, y_train, X_test, y_test
 
 def randomize_data(X, y, seed=7):
-    print("randomize_data")
     # Create generator object with seed (for consistent testing across compilation)
     #gnrtr = np.random.default_rng(7)
     np.random.seed(seed)
@@ -46,7 +44,6 @@ def randomize_data(X, y, seed=7):
     return X[r, :], y[r]
 
 def normalize_mnist_data(X):
-    print("normalize mnist data")
     max_val = np.amax(X)
     min_val = np.amin(X)
     range_val = max_val - min_val
