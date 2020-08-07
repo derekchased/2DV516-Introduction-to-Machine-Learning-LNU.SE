@@ -54,34 +54,26 @@ def exercise_1_2(gscv, X_train, y_train, X_test, y_test):
     # Meshgrid
     xx, yy = pltf.get_meshgrid(X1, X2)
     
-    accuracy = str(round(abs(clf.score(X_test, y_test)),5))
-    kernel = str(gscv.best_params_["kernel"])
-    
-    # plot boundary and data points
+    # plot boundary and data points for Train set
     fig = plt.figure()
-    title = "Ex 1, Train accuracy "+str(round(abs(gscv.best_score_),5))+" "
+    title = "Ex 1 - TRAIN accuracy "+str(round(abs(gscv.best_score_),5))+" "
     for key in gscv.best_params_:
         title = title+key+":"+str(gscv.best_params_[key])+" "
     fig.suptitle(title)
-    
-    
     ax = fig.add_subplot(1, 1, 1)
     pltf.add_countour(ax, xx, yy, clf, colors='r',linewidths=0.2)
     ax.scatter(X_train[:,0], X_train[:,1], s=.5,c=y_train)
     plt.show()
-    #plt.savefig("./report/ex1_"+kernel+"_train.png"  )
-    plt.show()
     
+    # plot boundary and data points for Test set
     accuracy = str(round(abs(clf.score(X_test, y_test)),5))
     kernel = str(gscv.best_params_["kernel"])
-    
     fig = plt.figure()
-    title = "Ex 1, " + kernel + ", test accuracy, " + accuracy+" "
+    title = "Ex 1- TEST accuracy, kernel: " + kernel + ", accuracy: " + accuracy+" "
     fig.suptitle(title)
     ax = fig.add_subplot(1, 1, 1)
     pltf.add_countour(ax, xx, yy, clf, colors='r',linewidths=0.2)
     ax.scatter(X_test[:,0], X_test[:,1], s=.5,c=y_test)
-    #plt.savefig("./report/ex1_"+kernel+"_test.png"  )
     plt.show()
     
 exercise_1()

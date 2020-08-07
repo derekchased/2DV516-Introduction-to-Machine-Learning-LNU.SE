@@ -19,10 +19,7 @@ def compute_gram_X_Y(X, Y, sigma = .01, degree = 2):
     # Where X.shape = (n,p), and Y.shape = (m,p), create an (n,m) matrix G
     G = np.zeros((n,m))
 
-    # Outer loop is from from zero to second to last row. This is because the last index will already be computed and filled in
     for i in range(n):
-        
-        # Inner loop starts at the current outer index+1 and goes to the last row
         for j in range(m):
             xrow = X[i,:]
             yrow = Y[j,:]
