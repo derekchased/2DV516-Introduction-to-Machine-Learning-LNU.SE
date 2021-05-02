@@ -16,9 +16,10 @@ def compute_gram_X_Y(X, Y, sigma = .01, degree = 2):
     n = len(X)
     m = len(Y)
 
-    # Where X.shape = (n,p), and Y.shape = (m,p), create an (n,m) matrix G
+    # Initialize 'empty' matrix, Where X.shape = (n,p), and Y.shape = (m,p), create an (n,m) matrix G
     G = np.zeros((n,m))
 
+    
     for i in range(n):
         for j in range(m):
             xrow = X[i,:]
